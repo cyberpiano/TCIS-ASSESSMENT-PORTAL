@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Temple Christian International School</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tcis: {
+              navy: '#1a2b49',
+              'navy-dark': '#0f1b2f',
+              'navy-light': '#2c3e60',
+              gold: '#c59b27',
+              'gold-light': '#dfb746',
+              'gold-bg': '#fdf8eb'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome 6 Icons via CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- jsPDF & AutoTable via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- JSZip & FileSaver via CDN for Bulk PDF Zip Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Firebase Compat SDK (v10.8.0) via CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col">
+
+  <!-- Mobile Backdrop -->
+  <div id="mobileSidebarBackdrop" class="fixed inset-0 bg-slate-900/60 z-40 hidden lg:hidden"></div>
+
+  <!-- Top Application Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm no-print">
+    <div class="px-4 sm:px-6 py-2.5 flex items-center justify-between">
+      
+      <!-- Left: Mobile Toggle & Brand Title -->
+      <div class="flex items-center space-x-3">
+        <button id="mobileSidebarToggle" class="lg:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+        <div class="flex items-center space-x-3">
+          <img src="tcis-crest.png" alt="TCIS Crest" class="h-11 sm:h-12 w-auto object-contain shrink-0" onerror="this.onerror=null; this.src='tcis-logo.png';" />
+          <div class="min-w-0">
+            <h1 class="font-crest text-xs sm:text-base font-bold text-tcis-navy tracking-wide truncate max-w-[210px] sm:max-w-none school-name-text">
+              Temple Christian International School
+            </h1>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold school-motto-text hidden sm:block">
+              Student Results &amp; Reports System
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: User Profile & Mode Indicator -->
+      <div class="flex items-center space-x-4">
+        <!-- Live vs Local Indicator -->
+        <div id="dataModeBadge" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+          System Online
+        </div>
+
+        <!-- User Information -->
+        <div class="flex items-center space-x-2.5 pl-2 border-l border-slate-200">
+          <div class="text-right hidden md:block">
+            <div id="headerUserName" class="text-xs font-bold text-slate-800">Staff Member</div>
+            <div id="headerUserRole" class="text-[10px]">
+              <span class="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-bold uppercase">Staff</span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Body Layout: Sidebar + Workspace -->
+  <div class="flex-grow flex overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebarNav"
+      class="fixed inset-y-0 left-0 top-0 z-50 w-72 max-w-[85vw] bg-tcis-navy text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:w-64 lg:z-auto shadow-2xl lg:shadow-none no-print">
+      
+      <!-- Mobile Sidebar Header with Close Button -->
+      <div class="lg:hidden flex items-center justify-between p-3.5 border-b border-tcis-navy-light bg-tcis-navy-dark">
+        <div class="flex items-center space-x-2.5">
+          <img src="tcis-crest.png" alt="TCIS" class="h-8 w-auto object-contain shrink-0" onerror="this.onerror=null; this.src='tcis-logo.png';" />
+          <span class="text-xs font-bold font-crest tracking-wide text-white uppercase">TCIS Portal</span>
+        </div>
+        <button onclick="Dashboard.closeMobileSidebar()" class="p-1.5 text-slate-300 hover:text-white rounded-lg focus:outline-none" title="Close Menu">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="py-4 px-3 space-y-1.5 flex-grow overflow-y-auto">
+        <div class="px-3 pb-2 text-[10px] uppercase font-bold tracking-wider text-slate-400">
+          Academic Workspace
+        </div>
+
+        <!-- 1. Dashboard -->
+        <button data-nav-target="dashboard"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition bg-[#0f1b2f] text-tcis-gold border-l-4 border-tcis-gold">
+          <i class="fa-solid fa-gauge-high w-6 text-center text-base mr-2"></i>
+          Dashboard
+        </button>
+
+        <!-- 2. Students Directory -->
+        <button data-nav-target="students"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-user-graduate w-6 text-center text-base mr-2"></i>
+          Students Directory
+        </button>
+
+        <!-- 3. Link Student Subjects (Admin Only) -->
+        <button id="navSubjectLinking" data-nav-target="subject-linking"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-link w-6 text-center text-base mr-2"></i>
+          Student Subjects
+        </button>
+
+        <!-- 4. Teachers & Assignments (Admin Only) -->
+        <button id="navTeachers" data-nav-target="teachers"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-chalkboard-user w-6 text-center text-base mr-2"></i>
+          Teachers &amp; Classes
+        </button>
+
+        <!-- 5. Subjects Catalog (Admin Only) -->
+        <button id="navSubjectsCatalog" data-nav-target="subjects-catalog"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-book-open w-6 text-center text-base mr-2"></i>
+          Subjects Catalog
+        </button>
+
+        <!-- 6. Enter Results -->
+        <button data-nav-target="results"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-pen-to-square w-6 text-center text-base mr-2"></i>
+          Enter Results
+        </button>
+
+        <!-- 7. Generate Reports -->
+        <button data-nav-target="reports"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-file-invoice w-6 text-center text-base mr-2"></i>
+          Generate Reports
+        </button>
+
+        <!-- 8. School Settings (Admin Only) -->
+        <button id="navSettings" data-nav-target="settings"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-tcis-navy-light">
+          <i class="fa-solid fa-sliders w-6 text-center text-base mr-2"></i>
+          School Settings
+        </button>
+      </nav>
+
+      <!-- Sidebar Bottom / Logout -->
+      <div class="p-3 border-t border-tcis-navy-light">
+        <button id="logoutBtn"
+          class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-rose-300 hover:bg-rose-950/40 hover:text-rose-200 transition">
+          <i class="fa-solid fa-arrow-right-from-bracket w-6 text-center text-base mr-2"></i>
+          Logout
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow overflow-y-auto p-4 sm:p-6 lg:p-8">
+
+      <!-- ============================================================== -->
+      <!-- SECTION 1: DASHBOARD OVERVIEW -->
+      <!-- ============================================================== -->
+      <section id="section-dashboard" class="app-section space-y-6 animate-fade-in">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-tcis-navy to-tcis-navy-light rounded-2xl p-6 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold font-crest tracking-wide">
+              Welcome to TCIS Assessment Portal
+            </h2>
+            <p class="text-sm text-slate-200 mt-1 max-w-xl">
+              Manage student records, record continuous assessments, calculate unrounded grades and term GPAs, and produce printable terminal reports.
+            </p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="Dashboard.switchSection('results')" 
+              class="px-4 py-2 bg-tcis-gold hover:bg-tcis-gold-light text-tcis-navy-dark text-xs sm:text-sm font-bold rounded-xl shadow transition">
+              <i class="fa-solid fa-pen-to-square mr-1.5"></i> Enter Results
+            </button>
+            <button onclick="Dashboard.switchSection('reports')" 
+              class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold rounded-xl border border-white/20 transition">
+              <i class="fa-solid fa-file-pdf mr-1.5"></i> Generate Reports
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Summary Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <!-- Card 1: Total Students -->
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Students</p>
+              <h3 id="statTotalStudents" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+              <p class="text-xs text-blue-800 font-medium mt-1">Registered pupils</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-800 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Classes / Year Groups -->
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Classes &amp; Streams</p>
+              <h3 id="statTotalClasses" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+              <p class="text-xs text-indigo-700 font-medium mt-1">Year 7 to Year 13</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+          </div>
+
+          <!-- Card 3: Results Entered This Term -->
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Results Entered</p>
+              <h3 id="statResultsEntered" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+              <p class="text-xs text-amber-700 font-medium mt-1">Subject scores this term</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-list-check"></i>
+            </div>
+          </div>
+
+          <!-- Card 4: Reports Ready This Term -->
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Reports Ready</p>
+              <h3 id="statReportsGenerated" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+              <p class="text-xs text-emerald-700 font-medium mt-1">Completed student reports</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-file-circle-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEACHER ASSIGNED CLASSES WORKSPACE (Rendered for Teachers) -->
+        <div id="teacherDashboardClassesCard" class="hidden bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="font-extrabold text-base text-slate-900 flex items-center">
+                <i class="fa-solid fa-chalkboard-user text-indigo-700 mr-2 text-lg"></i>
+                My Teaching Classes &amp; Gradebooks
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">Click any assigned class below to jump directly into mark entry for that group.</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span id="teacherAssignedClassesCountBadge" class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-800 text-xs font-bold border border-indigo-200">
+                0 Classes Assigned
+              </span>
+            </div>
+          </div>
+
+          <!-- Dynamic Grid of Assigned Classes -->
+          <div id="teacherAssignedClassesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            <!-- Rendered dynamically by js/dashboard.js -->
+          </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center">
+              <i class="fa-solid fa-clock-rotate-left text-blue-800 mr-2"></i>
+              Recently Recorded Assessment Results
+            </h3>
+            <button onclick="Dashboard.switchSection('results')" 
+              class="text-xs font-semibold text-blue-800 hover:text-blue-900">
+              View All <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                <tr>
+                  <th class="py-3 px-4">Student</th>
+                  <th class="py-3 px-4">Subject</th>
+                  <th class="py-3 px-4">Score</th>
+                  <th class="py-3 px-4">Grade</th>
+                  <th class="py-3 px-4 text-right">Time</th>
+                </tr>
+              </thead>
+              <tbody id="recentActivityTableBody">
+                <tr>
+                  <td colspan="5" class="text-center py-6 text-slate-400">Loading activity...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 2: STUDENT MANAGEMENT -->
+      <!-- ============================================================== -->
+      <section id="section-students" class="app-section space-y-6 hidden animate-fade-in">
+        
+        <!-- Header Controls -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Student Directory</h2>
+            <p class="text-xs text-slate-500">Manage student profiles, enrollment, and academic history.</p>
+          </div>
+          <div>
+            <button onclick="Students.openAddModal()"
+              class="px-4 py-2.5 bg-tcis-navy hover:bg-tcis-navy-dark text-white text-xs sm:text-sm font-semibold rounded-xl shadow transition flex items-center">
+              <i class="fa-solid fa-user-plus mr-2"></i> Add New Student
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- Search input -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Search Students</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+              </span>
+              <input type="text" id="studentSearchInput" placeholder="Name, Admission No..."
+                class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-tcis-navy focus:bg-white" />
+            </div>
+          </div>
+
+          <!-- Year Group Filter -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Year Group</label>
+            <select id="studentYearGroupFilter" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-tcis-navy focus:bg-white">
+              <option value="">All Year Groups</option>
+            </select>
+          </div>
+
+          <!-- Class Filter -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Class / Stream</label>
+            <select id="studentClassFilter" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-tcis-navy focus:bg-white">
+              <option value="">All Classes / Streams</option>
+            </select>
+          </div>
+
+          <!-- Status Filter -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Enrollment Status</label>
+            <select id="studentStatusFilter" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-tcis-navy focus:bg-white">
+              <option value="">All Statuses</option>
+              <option value="Active">Active Only</option>
+              <option value="Inactive">Inactive Only</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-5 py-3 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+            <span id="studentsCountBadge" class="text-xs font-semibold text-slate-600">0 students</span>
+            <span class="text-xs text-slate-400">Student Directory</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-4">Admission No.</th>
+                  <th class="py-3 px-4">Full Name</th>
+                  <th class="py-3 px-4">Year Group</th>
+                  <th class="py-3 px-4">Class</th>
+                  <th class="py-3 px-4">Academic Year</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody">
+                <tr>
+                  <td colspan="7" class="text-center py-8 text-slate-400">Loading student directory...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 3: ENTER RESULTS -->
+      <!-- ============================================================== -->
+      <section id="section-results" class="app-section space-y-6 hidden animate-fade-in">
+        
+        <!-- Header with Entry Mode Toggle -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Student Results Entry</h2>
+            <p class="text-xs text-slate-500">Record assessment scores across the class with live TCIS grading, real-time GPA, and flexible exercise columns.</p>
+          </div>
+          <div class="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button id="entryModeClassBtn" onclick="Results.setEntryMode('class')"
+              class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-white text-indigo-900 shadow-sm flex items-center">
+              <i class="fa-solid fa-table-list mr-1.5"></i> Class Sheet Entry
+            </button>
+            <button id="entryModeStudentBtn" onclick="Results.setEntryMode('student')"
+              class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900 flex items-center">
+              <i class="fa-solid fa-user-pen mr-1.5"></i> Single Student Entry
+            </button>
+          </div>
+        </div>
+
+        <!-- Workflow Step Bar / Selectors -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <!-- 1. Academic Year -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">1. Academic Year</label>
+              <select id="resultsAcademicYear" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+                <option value="2025/2026">2025/2026</option>
+                <option value="2024/2025">2024/2025</option>
+              </select>
+            </div>
+
+            <!-- 2. Term -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">2. Term</label>
+              <select id="resultsTerm" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+                <option value="Term 1">Term 1</option>
+                <option value="Term 2">Term 2</option>
+                <option value="Term 3">Term 3</option>
+              </select>
+            </div>
+
+            <!-- 3. Subject -->
+            <div>
+              <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1">3. Subject *</label>
+              <select id="resultsSubjectSelect" class="w-full px-3 py-2 bg-indigo-50 border border-indigo-300 rounded-lg text-xs font-bold text-indigo-900 focus:ring-2 focus:ring-indigo-800">
+                <option value="">Select Subject to Grade...</option>
+              </select>
+            </div>
+
+            <!-- 4. Year Group -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">4. Year Group *</label>
+              <select id="resultsYearGroup" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+                <option value="">Select Year Group</option>
+              </select>
+            </div>
+
+            <!-- 5. Class -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">5. Class / Stream *</label>
+              <select id="resultsClass" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+                <option value="">All Classes</option>
+              </select>
+            </div>
+
+            <!-- Optional Student Selector (Only for Single Student mode) -->
+            <div id="resultsSingleStudentWrapper" class="hidden sm:col-span-2 lg:col-span-5 pt-2 border-t border-slate-100">
+              <label class="block text-[11px] font-bold text-blue-900 uppercase mb-1">Select Student to Grade *</label>
+              <select id="resultsStudentSelect" class="w-full px-3 py-2 bg-blue-50 border border-blue-300 rounded-lg text-xs font-bold text-blue-900 focus:ring-2 focus:ring-blue-800">
+                <option value="">Select Student...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW A: CLASS SPREADSHEET ENTRY WORKSPACE -->
+        <!-- ========================================== -->
+        <div id="classSheetWorkspace" class="space-y-4">
+          
+          <!-- Top Info & Action Bar -->
+          <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg border border-slate-800">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] font-mono uppercase tracking-wider">Class Assessment Sheet</span>
+                <span id="classSheetStudentCountBadge" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">0 Enrolled Students</span>
+              </div>
+              <h3 id="classSheetSubjectHeader" class="text-lg font-bold text-white mt-1">Select Subject &amp; Class to Grade</h3>
+              <p id="classSheetClassMeta" class="text-xs text-slate-300">Choose a Subject, Year Group, and Class above to load the student gradebook.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="classSheetAddExerciseBtn" onclick="Results.addClassExerciseColumn()"
+                class="px-3.5 py-2 bg-indigo-700/80 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg border border-indigo-400/30 transition shadow flex items-center">
+                <i class="fa-solid fa-plus mr-1.5 text-indigo-300"></i> Add Exercise Column
+              </button>
+              <button id="classSheetSaveAllBtn" onclick="Results.saveAllClassGridResults()"
+                class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-lg shadow-lg transition flex items-center">
+                <i class="fa-solid fa-floppy-disk mr-2"></i> Save All Class Marks
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Search & Max Mark Settings Bar -->
+          <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center space-x-2">
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                <input type="text" id="classSheetSearchInput" oninput="Results.filterClassGridRows(this.value)"
+                  placeholder="Filter student in class..."
+                  class="pl-8 pr-3 py-1.5 border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-700 w-56" />
+              </div>
+              <span class="text-slate-400 text-xs hidden sm:inline">|</span>
+              <span class="text-slate-600 text-[11px] font-semibold hidden sm:inline">Default Max Marks:</span>
+              <span class="text-[11px] px-2 py-0.5 bg-slate-100 rounded text-slate-700 font-mono">Ex: 20</span>
+              <span class="text-[11px] px-2 py-0.5 bg-indigo-50 rounded text-indigo-900 font-mono">Prog 1: 100</span>
+              <span class="text-[11px] px-2 py-0.5 bg-indigo-50 rounded text-indigo-900 font-mono">Prog 2: 100</span>
+              <span class="text-[11px] px-2 py-0.5 bg-blue-50 rounded text-blue-900 font-mono">Mid: 100</span>
+              <span class="text-[11px] px-2 py-0.5 bg-slate-100 rounded text-slate-700 font-mono">End: 100</span>
+            </div>
+            <div class="text-[11px] text-slate-500 flex items-center space-x-1">
+              <i class="fa-solid fa-circle-info text-indigo-600"></i>
+              <span>Progressive test scores are graded instantly with the official TCIS GPA scale.</span>
+            </div>
+          </div>
+
+          <!-- The Spreadsheet Table Container -->
+          <div class="overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-sm max-h-[650px] overflow-y-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead id="classSheetTableHead" class="bg-slate-900 text-white text-[11px] font-bold uppercase tracking-wider sticky top-0 z-10">
+                <!-- Rendered dynamically by results.js -->
+              </thead>
+              <tbody id="classSheetTableBody" class="divide-y divide-slate-100">
+                <tr>
+                  <td colspan="12" class="text-center py-12 text-slate-400">
+                    <i class="fa-solid fa-chalkboard-user text-3xl mb-2 text-slate-300 block"></i>
+                    Please select a Subject, Year Group, and Class above to load students.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Save Action Bar -->
+          <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="text-xs text-slate-500 font-medium">
+              <span id="classSheetSavedStatus" class="inline-flex items-center text-slate-500">
+                <i class="fa-solid fa-cloud mr-1.5 text-slate-400"></i> Changes are recorded to your live database on save.
+              </span>
+            </div>
+            <button onclick="Results.saveAllClassGridResults()"
+              class="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-extrabold rounded-xl shadow-lg transition flex items-center">
+              <i class="fa-solid fa-floppy-disk mr-2"></i> Save All Class Marks
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW B: SINGLE STUDENT PORTFOLIO ENTRY     -->
+        <!-- ========================================== -->
+        <div id="resultsEntrySection" class="space-y-5 hidden">
+          
+          <!-- Selected Student Banner -->
+          <div class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-tcis-gold font-bold">Currently Recording Results For:</span>
+              <h3 id="resultsStudentHeaderName" class="text-lg font-bold text-white">Student Name</h3>
+              <p id="resultsStudentHeaderMeta" class="text-xs text-slate-300 font-mono">Admission No &bull; Year Group</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button id="addSubjectRowBtn"
+                class="px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition">
+                <i class="fa-solid fa-plus mr-1"></i> Add Subject
+              </button>
+              <button id="saveAllResultsBtn"
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow transition flex items-center">
+                <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save All Results
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Preset Subject Buttons -->
+          <div class="bg-white p-3 rounded-xl border border-slate-200 flex flex-wrap items-center gap-1.5 text-xs">
+            <span class="font-bold text-slate-500 mr-2 text-[11px] uppercase">Quick Add Subjects:</span>
+            <button onclick="Results.addNewSubjectRow('Mathematics')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ Math</button>
+            <button onclick="Results.addNewSubjectRow('English Language')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ English</button>
+            <button onclick="Results.addNewSubjectRow('Biology')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ Biology</button>
+            <button onclick="Results.addNewSubjectRow('Chemistry')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ Chemistry</button>
+            <button onclick="Results.addNewSubjectRow('Physics')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ Physics</button>
+            <button onclick="Results.addNewSubjectRow('Computer Science')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ Computer Science</button>
+            <button onclick="Results.addNewSubjectRow('ICT')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium text-slate-700 transition">+ ICT</button>
+          </div>
+
+          <!-- Subject Cards Container -->
+          <div id="subjectRowsContainer">
+            <!-- Dynamic Subject Cards Rendered via results.js -->
+          </div>
+
+          <!-- Overall Student Comment Section -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-comment-dots text-tcis-gold mr-2 text-base"></i>
+                Teacher's Overall Student Term Remark
+              </label>
+              <span class="text-[11px] text-slate-400">Printed on terminal report</span>
+            </div>
+            
+            <textarea id="resultsOverallComment" rows="2" 
+              placeholder="Enter an overall terminal evaluation for the student..."
+              class="w-full p-3 border border-slate-300 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tcis-navy"></textarea>
+
+            <!-- Quick Remark Templates -->
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+              <span class="text-slate-400 text-[11px] font-semibold">Quick Suggestions:</span>
+              <button type="button" onclick="Results.setQuickOverallComment('Good student and attentive in class.')"
+                class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition text-[11px]">
+                "Good student and attentive in class"
+              </button>
+              <button type="button" onclick="Results.setQuickOverallComment('Participates actively in lessons.')"
+                class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition text-[11px]">
+                "Participates actively in lessons"
+              </button>
+              <button type="button" onclick="Results.setQuickOverallComment('Has demonstrated good academic progress.')"
+                class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition text-[11px]">
+                "Has demonstrated good academic progress"
+              </button>
+              <button type="button" onclick="Results.setQuickOverallComment('Needs to improve homework completion.')"
+                class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition text-[11px]">
+                "Needs to improve homework completion"
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex justify-end space-x-3 pt-2">
+            <button onclick="Results.saveAllResults()"
+              class="px-6 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-lg transition flex items-center">
+              <i class="fa-solid fa-floppy-disk mr-2"></i> Save All Results for This Student
+            </button>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 4: GENERATE REPORTS -->
+      <!-- ============================================================== -->
+      <section id="section-reports" class="app-section space-y-6 hidden animate-fade-in">
+        
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Generate Terminal Reports</h2>
+            <p class="text-xs text-slate-500">Preview, print, and export official A4 terminal reports with grading and GPA computation.</p>
+          </div>
+          <div>
+            <button id="generateBulkReportsBtn"
+              class="px-4 py-2.5 bg-tcis-navy hover:bg-tcis-navy-dark text-white text-xs sm:text-sm font-semibold rounded-xl shadow transition flex items-center">
+              <i class="fa-solid fa-file-zipper mr-2 text-tcis-gold"></i> Bulk Class Export (ZIP)
+            </button>
+          </div>
+        </div>
+
+        <!-- Selection Toolbar -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 no-print">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Academic Year</label>
+            <select id="reportAcademicYear" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="2025/2026">2025/2026</option>
+              <option value="2024/2025">2024/2025</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Term</label>
+            <select id="reportTerm" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="Term 1">Term 1</option>
+              <option value="Term 2">Term 2</option>
+              <option value="Term 3">Term 3</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Year Group Filter</label>
+            <select id="reportYearGroupFilter" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="">All Year Groups</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Class Filter</label>
+            <select id="reportClassFilter" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="">All Classes</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1">Report Mode</label>
+            <select id="reportModeSelect" class="w-full px-3 py-2 bg-indigo-50 border border-indigo-300 rounded-lg text-xs font-bold text-indigo-900 focus:ring-2 focus:ring-indigo-800">
+              <option value="progressive">Progressive Test One Report</option>
+              <option value="midterm">MidTerm Report</option>
+              <option value="full">Full Terminal Report</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2 lg:col-span-1">
+            <label class="block text-[11px] font-bold text-blue-900 uppercase mb-1">Select Student *</label>
+            <select id="reportStudentSelect" class="w-full px-3 py-2 bg-blue-50 border border-blue-300 rounded-lg text-xs font-bold text-blue-900">
+              <option value="">Select a student...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Report Preview & Print Container -->
+        <div id="reportPreviewContainer" class="hidden space-y-4">
+          
+          <!-- Top Action Bar for Single Report -->
+          <div class="flex items-center justify-between bg-slate-800 text-white p-3.5 rounded-xl no-print">
+            <span class="text-xs font-semibold">
+              <i class="fa-solid fa-eye mr-2 text-tcis-gold"></i> Live Terminal Report Preview
+            </span>
+            <div class="flex items-center space-x-2">
+              <button id="downloadPdfBtn"
+                class="px-3.5 py-1.5 bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold rounded-lg transition shadow flex items-center">
+                <i class="fa-solid fa-download mr-1.5"></i> Download PDF
+              </button>
+              <button id="printPdfBtn"
+                class="px-3.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-lg transition border border-slate-600 flex items-center">
+                <i class="fa-solid fa-print mr-1.5"></i> Print Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Formal A4 Printable Document Structure -->
+          <div id="printableReportArea" class="bg-white p-8 rounded-2xl border-2 border-tcis-navy shadow-xl max-w-5xl mx-auto text-slate-900">
+            
+            <!-- School Header -->
+            <div class="border-b-2 border-tcis-gold pb-4 mb-4 text-center relative">
+              <div class="flex items-center justify-center space-x-4 mb-2">
+                <img src="tcis-crest.png" alt="TCIS Crest" class="h-16 w-auto object-contain shrink-0" onerror="this.onerror=null; this.src='tcis-logo.png';" />
+                <div class="text-left">
+                  <h2 id="previewSchoolName" class="font-crest text-xl sm:text-2xl font-extrabold tracking-wide text-tcis-navy uppercase">
+                    TEMPLE CHRISTIAN INTERNATIONAL SCHOOL
+                  </h2>
+                  <p id="previewSchoolMotto" class="text-xs italic text-tcis-gold font-semibold">
+                    "Excellence, Integrity and Christian Leadership"
+                  </p>
+                  <p id="previewSchoolAddress" class="text-[11px] text-slate-500 mt-0.5">
+                    Accra, Ghana
+                  </p>
+                </div>
+              </div>
+              <div id="previewReportBannerTitle" class="mt-2 inline-block bg-tcis-navy text-white text-xs uppercase tracking-widest font-bold py-1 px-4 rounded-md">
+                STUDENT TERMINAL REPORT
+              </div>
+            </div>
+
+            <!-- Student Metadata Box -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 text-xs grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Student Full Name</span>
+                <span id="previewStudentName" class="font-bold text-slate-900 text-sm">Kofi Mensah</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Admission Number</span>
+                <span id="previewAdmissionNo" class="font-mono font-bold text-tcis-navy text-sm">TCIS/2024/001</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Year Group &amp; Class</span>
+                <span id="previewYearGroup" class="font-semibold text-slate-800">Year 10</span> &bull; 
+                <span id="previewClass" class="text-slate-600">Science</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Academic Term</span>
+                <span id="previewAcademicYear" class="font-semibold text-slate-800">2025/2026</span> (<span id="previewTerm" class="font-semibold text-blue-900">Term 1</span>)
+              </div>
+              <div class="col-span-2 sm:col-span-4 pt-1 border-t border-slate-200 flex justify-between text-[11px] text-slate-500">
+                <span>Date Issued: <strong id="previewDate" class="text-slate-700">13 Oct 2026</strong></span>
+                <span>Official Document &bull; Temple Christian International School</span>
+              </div>
+            </div>
+
+            <!-- Academic Results Table -->
+            <div class="overflow-x-auto mb-5 border border-slate-200 rounded-lg">
+              <table class="w-full text-left text-xs">
+                <thead id="reportPreviewThead" class="bg-tcis-navy text-white text-[11px] font-bold">
+                  <tr>
+                    <th class="py-2.5 px-3">Subject</th>
+                    <th class="py-2.5 px-2 text-center">Ex. (10%)</th>
+                    <th class="py-2.5 px-2 text-center">HW (10%)</th>
+                    <th class="py-2.5 px-2 text-center">Prog. (20%)</th>
+                    <th class="py-2.5 px-2 text-center">Mid (20%)</th>
+                    <th class="py-2.5 px-2 text-center">End (40%)</th>
+                    <th class="py-2.5 px-2 text-center">Final Score</th>
+                    <th class="py-2.5 px-2 text-center">Grade</th>
+                    <th class="py-2.5 px-2 text-center">GP</th>
+                    <th class="py-2.5 px-3">Description</th>
+                  </tr>
+                </thead>
+                <tbody id="reportPreviewTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Summary & GPA Statistics Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 text-center">
+              <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Overall Average</span>
+                <span id="previewAverageScore" class="text-base font-extrabold text-tcis-navy">0.00%</span>
+              </div>
+              <div class="bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+                <span class="text-[10px] uppercase font-bold text-amber-800 block">Term GPA (Max 4.00)</span>
+                <span id="previewGPA" class="text-base font-extrabold text-amber-900">0.00 / 4.00</span>
+              </div>
+              <div class="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
+                <span class="text-[10px] uppercase font-bold text-emerald-800 block">Completed Subjects</span>
+                <span id="previewCompletedCount" class="text-base font-extrabold text-emerald-900">0</span>
+              </div>
+              <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Incomplete Subjects</span>
+                <span id="previewIncompleteCount" class="text-base font-extrabold text-slate-700">0</span>
+              </div>
+            </div>
+
+            <!-- Remarks Section -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 space-y-2.5 text-xs">
+              <div class="flex items-start">
+                <span class="font-bold text-tcis-navy w-44 flex-shrink-0">Class Teacher's General Remark:</span>
+                <span id="previewTeacherComment" class="text-slate-700 italic">"Good student and attentive in class."</span>
+              </div>
+              <div class="flex items-start">
+                <span class="font-bold text-tcis-navy w-44 flex-shrink-0">Headteacher's Remark:</span>
+                <span id="previewHeadteacherComment" class="text-slate-700 italic">"Approved by Dr. E. Mensah (Headmaster)."</span>
+              </div>
+            </div>
+
+            <!-- Signatures Section -->
+            <div class="grid grid-cols-3 gap-6 pt-6 mb-4 text-center text-xs">
+              <div>
+                <div class="border-b border-slate-400 pb-8 mb-1"></div>
+                <span class="font-bold text-slate-700">Class Teacher's Signature</span>
+              </div>
+              <div>
+                <div class="border-b border-slate-400 pb-8 mb-1"></div>
+                <span class="font-bold text-slate-700">Headteacher's Signature &amp; Stamp</span>
+              </div>
+              <div>
+                <div class="border-b border-slate-400 pb-8 mb-1"></div>
+                <span class="font-bold text-slate-700">Parent / Guardian's Signature</span>
+              </div>
+            </div>
+
+            <!-- Confidentiality & Footer -->
+            <div class="border-t border-slate-200 pt-3 text-center text-[10px] text-slate-400">
+              <span id="previewFooterDisclaimer">Official Terminal Report - Temple Christian International School. Any alteration invalidates this document.</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 5: SETTINGS (ADMIN ONLY) -->
+      <!-- ============================================================== -->
+      <section id="section-settings" class="app-section space-y-6 hidden animate-fade-in">
+        
+        <!-- Header -->
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">School Settings &amp; Administration</h2>
+          <p class="text-xs text-slate-500">Configure institutional metadata, assessment category weights, and manage authorized staff accounts.</p>
+        </div>
+
+        <!-- School Profile & Grading Settings Form -->
+        <form id="schoolSettingsForm" class="space-y-6">
+          
+          <!-- General Details Card -->
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center">
+              <i class="fa-solid fa-school text-blue-800 mr-2"></i> Institutional Profile
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">School Name</label>
+                <input type="text" id="settingSchoolName" required
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">School Motto</label>
+                <input type="text" id="settingSchoolMotto"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Address</label>
+                <input type="text" id="settingSchoolAddress"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Contact Details (Phone / Email)</label>
+                <input type="text" id="settingContactDetails"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Headteacher / Principal Name</label>
+                <input type="text" id="settingHeadteacherName"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">School Logo</label>
+                <div class="flex items-center space-x-3">
+                  <input type="file" id="schoolLogoFile" accept="image/*"
+                    class="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                  <img id="schoolLogoPreview" src="" alt="Logo Preview" class="w-9 h-9 rounded object-contain border border-slate-200 hidden" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Defaults -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Default Academic Year</label>
+                <input type="text" id="settingDefaultYear" value="2025/2026"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Default Term</label>
+                <select id="settingDefaultTerm" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs">
+                  <option value="Term 1">Term 1</option>
+                  <option value="Term 2">Term 2</option>
+                  <option value="Term 3">Term 3</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Report Footer Disclaimer</label>
+                <input type="text" id="settingReportFooter"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Weights Configuration Card -->
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-scale-balanced text-amber-600 mr-2"></i> Assessment Category Weights (%)
+              </h3>
+              <span id="weightTotalBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+                Total: 100%
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-500">
+              Specify the weighting percentage for each of the 5 assessment categories. The sum must strictly equal 100%.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Exercise</label>
+                <div class="relative">
+                  <input type="number" id="weightExercise" min="0" max="100" step="1" value="10" required
+                    class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-center" />
+                  <span class="absolute right-2.5 top-2 text-slate-400 text-xs">%</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Homework</label>
+                <div class="relative">
+                  <input type="number" id="weightHomework" min="0" max="100" step="1" value="10" required
+                    class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-center" />
+                  <span class="absolute right-2.5 top-2 text-slate-400 text-xs">%</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Progressive Test</label>
+                <div class="relative">
+                  <input type="number" id="weightProgressive" min="0" max="100" step="1" value="20" required
+                    class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-center" />
+                  <span class="absolute right-2.5 top-2 text-slate-400 text-xs">%</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Mid-Term Exam</label>
+                <div class="relative">
+                  <input type="number" id="weightMidTerm" min="0" max="100" step="1" value="20" required
+                    class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-center" />
+                  <span class="absolute right-2.5 top-2 text-slate-400 text-xs">%</span>
+                </div>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">End-of-Term Exam</label>
+                <div class="relative">
+                  <input type="number" id="weightEndOfTerm" min="0" max="100" step="1" value="40" required
+                    class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-center" />
+                  <span class="absolute right-2.5 top-2 text-slate-400 text-xs">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-3">
+              <button type="submit" id="saveSettingsBtn"
+                class="px-5 py-2.5 bg-tcis-navy hover:bg-tcis-navy-dark text-white text-xs font-bold rounded-xl shadow transition">
+                <i class="fa-solid fa-check mr-1.5"></i> Save School Settings &amp; Weights
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION: STUDENT SUBJECT LINKING (Admin Only)                  -->
+      <!-- ============================================================== -->
+      <section id="section-subject-linking" class="app-section space-y-6 hidden animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Link Students to Subjects</h2>
+            <p class="text-xs text-slate-500">Assign curriculum subjects to each student so their assessment entry is accurate.</p>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Filter by Year Group</label>
+            <select id="linkingYearGroupFilter" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="">All Year Groups</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Filter by Class / Stream</label>
+            <select id="linkingClassFilter" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="">All Classes</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Search Student</label>
+            <input type="text" id="linkingSearchInput" placeholder="Filter student by name..."
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+          </div>
+        </div>
+
+        <!-- Students with Subject Enrollment Table -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-5 py-3 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+            <span id="linkingCountBadge" class="text-xs font-semibold text-slate-600">0 students</span>
+            <span class="text-xs text-slate-400">Click "Edit Subjects" to customize enrolled courses</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-4">Student Name</th>
+                  <th class="py-3 px-4">Year Group</th>
+                  <th class="py-3 px-4">Class</th>
+                  <th class="py-3 px-4">Enrolled Subjects</th>
+                  <th class="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="linkingStudentsTableBody">
+                <tr>
+                  <td colspan="5" class="text-center py-8 text-slate-400">Loading student enrollment list...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION: TEACHERS & CLASS ASSIGNMENTS (Admin Only)             -->
+      <!-- ============================================================== -->
+      <section id="section-teachers" class="app-section space-y-6 hidden animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Staff &amp; Teacher Class Assignments</h2>
+            <p class="text-xs text-slate-500">Provision teacher credentials and assign them to the exact subjects and classes they teach.</p>
+          </div>
+          <button onclick="Settings.openCreateUserModal()"
+            class="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold rounded-lg shadow transition">
+            <i class="fa-solid fa-user-plus mr-1.5"></i> Add Staff Account
+          </button>
+        </div>
+
+        <!-- Staff Accounts Management Table -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center pb-2 border-b border-slate-100">
+            <i class="fa-solid fa-users text-purple-700 mr-2"></i> All Staff Accounts
+          </h3>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                <tr>
+                  <th class="py-2.5 px-3">Name</th>
+                  <th class="py-2.5 px-3">Email</th>
+                  <th class="py-2.5 px-3">Role</th>
+                  <th class="py-2.5 px-3">Status</th>
+                  <th class="py-2.5 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="staffUsersTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Teacher Teaching Assignments Overview Table -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <div class="pb-2 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-chalkboard-user text-indigo-700 mr-2"></i> Teacher &rarr; Subject &amp; Class Permissions
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Assign each teacher to specific subjects and classes. Teachers only see these classes when entering student marks.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                <tr>
+                  <th class="py-2.5 px-3">Teacher Name</th>
+                  <th class="py-2.5 px-3">Email</th>
+                  <th class="py-2.5 px-3">Class &amp; Subject Assignments</th>
+                  <th class="py-2.5 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="teacherAssignmentsListBody">
+                <!-- Rendered dynamically by settings.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION: SUBJECTS CATALOG (Admin Only)                         -->
+      <!-- ============================================================== -->
+      <section id="section-subjects-catalog" class="app-section space-y-6 hidden animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Curriculum Subjects Catalog</h2>
+            <p class="text-xs text-slate-500">Add, edit subject codes and names, or delete curriculum subjects offered at TCIS.</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="Settings.seedStandardSubjects()"
+              class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition">
+              <i class="fa-solid fa-seedling mr-1 text-emerald-600"></i> Seed Standard Subjects
+            </button>
+            <button onclick="Settings.openAddSubjectModal()"
+              class="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold rounded-lg shadow transition">
+              <i class="fa-solid fa-plus mr-1"></i> Add Subject
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <span id="subjectsCountBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-100 text-teal-800">0 registered subjects</span>
+            <span class="text-xs text-slate-400">All subjects available across year groups</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                <tr>
+                  <th class="py-2.5 px-3">Subject Name</th>
+                  <th class="py-2.5 px-3">Subject Code</th>
+                  <th class="py-2.5 px-3">Category (Classes Offered)</th>
+                  <th class="py-2.5 px-3">Department</th>
+                  <th class="py-2.5 px-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="subjectsTableBody">
+                <!-- Rendered dynamically by settings.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD / EDIT STUDENT -->
+  <!-- ============================================================== -->
+  <div id="studentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+      <div class="bg-tcis-navy text-white px-6 py-4 flex items-center justify-between">
+        <h3 id="studentModalTitle" class="font-bold text-base">Add New Student</h3>
+        <button onclick="Students.closeModal()" class="text-slate-300 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <form id="studentModalForm" class="p-4 sm:p-6 space-y-4 overflow-y-auto flex-grow">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+            <input type="text" id="studentFormFullName" required placeholder="e.g. Kofi Mensah"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-tcis-navy" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Year Group *</label>
+            <select id="studentFormYearGroup" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+              <option value="">Select Year Group</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Class / Stream</label>
+            <input type="text" id="studentFormClassName" placeholder="e.g. Science, Humanities"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-tcis-navy" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Academic Year *</label>
+            <input type="text" id="studentFormAcademicYear" value="2025/2026" required
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-tcis-navy" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Enrollment Status</label>
+            <select id="studentFormStatus" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Date of Birth (Optional)</label>
+            <input type="date" id="studentFormDOB"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Guardian / Parent Contact</label>
+            <input type="text" id="studentFormGuardian" placeholder="Name & Phone"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs" />
+          </div>
+        </div>
+
+        <!-- Enrolled Subjects -->
+        <div id="studentFormSubjectsContainer" class="pt-2 border-t border-slate-100">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-bold text-slate-700">
+              <i class="fa-solid fa-book mr-1 text-teal-600"></i> Enrolled Subjects
+            </label>
+            <div class="flex space-x-2">
+              <button type="button" onclick="Students.selectAllEnrolledSubjects(true)"
+                class="text-[11px] text-blue-700 hover:underline font-semibold">Select All</button>
+              <span class="text-slate-300 text-xs">|</span>
+              <button type="button" onclick="Students.selectAllEnrolledSubjects(false)"
+                class="text-[11px] text-slate-500 hover:underline font-semibold">Clear All</button>
+            </div>
+          </div>
+          <div id="subjectsCheckboxGrid" class="grid grid-cols-2 gap-1.5 max-h-40 overflow-y-auto pr-1 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <!-- Populated dynamically by students.js -->
+            <p class="text-xs text-slate-400 col-span-2">Loading subjects...</p>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-4 border-t border-slate-100">
+          <button type="button" onclick="Students.closeModal()"
+            class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" id="saveStudentBtn"
+            class="px-5 py-2 bg-tcis-navy hover:bg-tcis-navy-dark text-white text-xs font-bold rounded-lg shadow">
+            Save Student
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: STUDENT ACADEMIC HISTORY DETAILS -->
+  <!-- ============================================================== -->
+  <div id="studentDetailsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col animate-fade-in border border-slate-200">
+      <div class="bg-tcis-navy text-white px-6 py-4 flex items-center justify-between">
+        <h3 class="font-bold text-base flex items-center">
+          <i class="fa-solid fa-graduation-cap text-tcis-gold mr-2"></i> Student Academic Records
+        </h3>
+        <button onclick="Students.closeDetailsModal()" class="text-slate-300 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div id="studentDetailsContent" class="p-6 overflow-y-auto flex-grow space-y-4">
+        <!-- Loaded dynamically -->
+      </div>
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end">
+        <button onclick="Students.closeDetailsModal()"
+          class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-lg">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: CREATE STAFF USER ACCOUNT -->
+  <!-- ============================================================== -->
+  <div id="createUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+      <div class="bg-purple-900 text-white px-6 py-4 flex items-center justify-between">
+        <h3 class="font-bold text-base">Provision New Staff Account</h3>
+        <button onclick="Settings.closeCreateUserModal()" class="text-purple-200 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <form id="createUserModalForm" class="p-4 sm:p-6 space-y-4 overflow-y-auto flex-grow">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+          <input type="text" id="newUserName" required placeholder="e.g. Mrs. Grace Lamptey"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-purple-900" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
+          <input type="email" id="newUserEmail" required placeholder="e.g. grace.lamptey@tcis.edu"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-purple-900" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Password *</label>
+          <input type="password" id="newUserPassword" required minlength="6" placeholder="Minimum 6 characters"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-purple-900" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Assigned Role *</label>
+          <select id="newUserRole" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+            <option value="teacher">Teacher (Results &amp; Student Workspace)</option>
+            <option value="admin">Administrator (Full Access &amp; Settings)</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="Settings.closeCreateUserModal()"
+            class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" id="submitCreateUserBtn"
+            class="px-5 py-2 bg-purple-900 hover:bg-purple-950 text-white text-xs font-bold rounded-lg shadow">
+            Create Account
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: EDIT / MANAGE TEACHER ACCOUNT -->
+  <!-- ============================================================== -->
+  <div id="editUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+      <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+        <h3 class="font-bold text-base flex items-center">
+          <i class="fa-solid fa-user-pen mr-2 text-indigo-400"></i> Manage Staff Account
+        </h3>
+        <button onclick="Settings.closeEditUserModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <form id="editUserModalForm" onsubmit="Settings.handleSaveEditedUser(event)" class="p-4 sm:p-6 space-y-4 overflow-y-auto flex-grow">
+        <input type="hidden" id="editUserUid" />
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+          <input type="text" id="editUserName" required
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-slate-800" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
+          <input type="email" id="editUserEmail" required
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-slate-800" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Assigned Role *</label>
+          <select id="editUserRole" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+            <option value="teacher">Teacher (Results &amp; Student Workspace)</option>
+            <option value="admin">Administrator (Full Access &amp; Settings)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Account Status *</label>
+          <select id="editUserStatus" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+            <option value="active">Active (Can log in &amp; grade)</option>
+            <option value="inactive">Deactivated (Login blocked)</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="Settings.closeEditUserModal()"
+            class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" id="saveEditedUserBtn"
+            class="px-5 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-lg shadow">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: CHANGE TEACHER PASSWORD (ADMIN DASHBOARD) -->
+  <!-- ============================================================== -->
+  <div id="changePasswordModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+      <div class="bg-amber-600 text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-base flex items-center">
+            <i class="fa-solid fa-key mr-2 text-amber-200"></i> Change Account Password
+          </h3>
+          <p id="changePasswordModalUser" class="text-xs text-amber-100 mt-0.5">Teacher Name</p>
+        </div>
+        <button onclick="Settings.closeChangePasswordModal()" class="text-amber-100 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <form id="changePasswordModalForm" onsubmit="Settings.handleSaveNewPassword(event)" class="p-4 sm:p-6 space-y-4 overflow-y-auto flex-grow">
+        <input type="hidden" id="changePasswordUid" />
+        <input type="hidden" id="changePasswordEmail" />
+        
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
+          <i class="fa-solid fa-circle-info mr-1 text-amber-600"></i>
+          Admins can set a new password directly for this account. The teacher will be able to log in immediately with this new password.
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">New Password *</label>
+            <button type="button" onclick="Settings.generateRandomPassword()" 
+              class="text-[11px] font-bold text-amber-700 hover:text-amber-900 underline">
+              <i class="fa-solid fa-dice mr-1"></i> Generate Password
+            </button>
+          </div>
+          <div class="relative">
+            <input type="text" id="changeUserPassword" required minlength="6" placeholder="Minimum 6 characters"
+              class="w-full px-3 py-2 pr-10 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono font-semibold focus:ring-2 focus:ring-amber-500" />
+            <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('changeUserPassword').value); Settings.showToast('Password copied to clipboard!', 'info');"
+              class="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700 text-xs" title="Copy to clipboard">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Confirm New Password *</label>
+          <input type="text" id="changeUserPasswordConfirm" required minlength="6" placeholder="Re-enter new password"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono font-semibold focus:ring-2 focus:ring-amber-500" />
+        </div>
+
+        <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
+          <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer">
+            <input type="checkbox" id="changePasswordSendEmail" checked class="rounded text-amber-600 focus:ring-amber-500" />
+            <span>Also send official password reset email link to teacher</span>
+          </label>
+          <button type="button" onclick="Settings.sendPasswordResetLinkDirectly()"
+            class="text-left text-xs text-indigo-700 hover:text-indigo-900 font-semibold underline py-1">
+            <i class="fa-solid fa-paper-plane mr-1 text-[11px]"></i> Or send email reset link only (without changing manually)
+          </button>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="Settings.closeChangePasswordModal()"
+            class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" id="savePasswordBtn"
+            class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow">
+            Update Password
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: CONFIRM DELETE TEACHER ACCOUNT -->
+  <!-- ============================================================== -->
+  <div id="deleteUserConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center animate-fade-in border border-slate-200">
+      <div class="w-14 h-14 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="font-bold text-base text-slate-900">Remove Teacher Account?</h3>
+      <p id="deleteUserConfirmDetails" class="text-xs text-slate-600 mt-2">
+        Are you sure you want to permanently delete this teacher account?
+      </p>
+      <p class="text-[11px] text-slate-400 mt-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+        <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i>
+        This will revoke login access and remove teaching assignments. Any student exam marks previously recorded will remain preserved in the academic records.
+      </p>
+      
+      <div class="flex items-center justify-center space-x-3 mt-6">
+        <button type="button" onclick="Settings.closeDeleteUserModal()"
+          class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50">
+          Cancel
+        </button>
+        <button type="button" onclick="Settings.handleDeleteUser()" id="confirmDeleteUserBtn"
+          class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg shadow transition flex items-center">
+          <i class="fa-solid fa-trash-can mr-1.5"></i> Yes, Remove Account
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD / EDIT SUBJECT -->
+  <!-- ============================================================== -->
+  <div id="subjectModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+      <div class="bg-teal-800 text-white px-6 py-4 flex items-center justify-between">
+        <h3 id="subjectModalTitle" class="font-bold text-base">Add New Subject</h3>
+        <button onclick="Settings.closeSubjectModal()" class="text-teal-200 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <form id="subjectModalForm" class="p-4 sm:p-6 space-y-4 overflow-y-auto flex-grow">
+        <input type="hidden" id="subjectFormId" value="" />
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Subject Name *</label>
+          <input type="text" id="subjectFormName" required placeholder="e.g. Mathematics"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-600" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Subject Code</label>
+          <input type="text" id="subjectFormCode" placeholder="e.g. MATH"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs uppercase focus:ring-2 focus:ring-teal-600" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Category (Classes Offered) *</label>
+          <input type="text" id="subjectFormCategory" required placeholder="e.g. Year 7-9, Year 10-11, Year 12-13, Year 7-13"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-600" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Department</label>
+          <input type="text" id="subjectFormDept" placeholder="e.g. Sciences, Languages, Humanities"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-600" />
+        </div>
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="Settings.closeSubjectModal()"
+            class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50">Cancel</button>
+          <button type="submit" id="saveSubjectBtn"
+            class="px-5 py-2 bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold rounded-lg shadow">Save Subject</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: TEACHER ASSIGNMENT (Assign Subject + Class to Teacher)  -->
+  <!-- ============================================================== -->
+  <div id="assignTeacherModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-in border border-slate-200">
+      
+      <!-- Modal Header -->
+      <div class="bg-indigo-900 text-white px-5 sm:px-6 py-4 flex items-center justify-between shrink-0">
+        <div>
+          <h3 class="font-bold text-base flex items-center">
+            <i class="fa-solid fa-chalkboard-user mr-2 text-indigo-300"></i> Manage Teaching Assignments
+          </h3>
+          <p id="assignTeacherModalName" class="text-indigo-200 text-xs mt-0.5 font-medium">Teacher Name</p>
+        </div>
+        <button onclick="Settings.closeAssignTeacherModal()" class="text-indigo-300 hover:text-white p-1.5 rounded-lg focus:outline-none hover:bg-indigo-800 transition" title="Close Modal">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-4 sm:p-6 space-y-5 overflow-y-auto flex-grow">
+        
+        <!-- Step 1 & 2: Assignment Builder -->
+        <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 sm:p-5 space-y-4 shadow-sm">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-indigo-200/70">
+            <div>
+              <p class="text-xs font-extrabold text-indigo-950 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-plus-circle text-indigo-700 mr-1.5"></i> Assign Subject &amp; Multiple Classes
+              </p>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                Pick a subject, then check all classes/streams across any year groups this teacher instructs.
+              </p>
+            </div>
+            <span id="assignClassSelectedBadge" class="self-start sm:self-center text-xs px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-800 font-bold border border-indigo-200">
+              0 classes selected
+            </span>
+          </div>
+
+          <!-- Subject Picker & Year Group Quick Filter -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-800 mb-1">
+                <i class="fa-solid fa-book-open text-indigo-600 mr-1"></i> 1. Select Subject *
+              </label>
+              <select id="assignSubject"
+                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-700 focus:outline-none">
+                <option value="">Select Subject to Assign...</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-800 mb-1">
+                <i class="fa-solid fa-filter text-indigo-600 mr-1"></i> 2. Filter Year Display (Optional)
+              </label>
+              <select id="assignYearGroupFilter" onchange="Settings.filterAssignClassDisplay(this.value)"
+                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 focus:ring-2 focus:ring-indigo-700 focus:outline-none">
+                <option value="ALL">All Year Groups (Year 7 – 13)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quick Selection Presets -->
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2">
+              <span class="text-[11px] font-bold text-slate-700">Quick Selection Presets:</span>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" onclick="Settings.selectCohortPreset('all')"
+                  class="px-2 py-0.5 bg-white border border-slate-300 hover:border-indigo-500 text-slate-700 hover:text-indigo-800 rounded text-[11px] font-semibold transition">
+                  All Cohorts (Yr 7-13)
+                </button>
+                <button type="button" onclick="Settings.selectCohortPreset('junior')"
+                  class="px-2 py-0.5 bg-white border border-slate-300 hover:border-indigo-500 text-slate-700 hover:text-indigo-800 rounded text-[11px] font-semibold transition">
+                  Junior (Yr 7-9)
+                </button>
+                <button type="button" onclick="Settings.selectCohortPreset('senior')"
+                  class="px-2 py-0.5 bg-white border border-slate-300 hover:border-indigo-500 text-slate-700 hover:text-indigo-800 rounded text-[11px] font-semibold transition">
+                  Senior (Yr 10-13)
+                </button>
+                <button type="button" onclick="Settings.selectCohortPreset('science')"
+                  class="px-2 py-0.5 bg-emerald-50 border border-emerald-300 hover:border-emerald-600 text-emerald-800 rounded text-[11px] font-semibold transition">
+                  Science Streams
+                </button>
+                <button type="button" onclick="Settings.selectCohortPreset('humanities')"
+                  class="px-2 py-0.5 bg-amber-50 border border-amber-300 hover:border-amber-600 text-amber-800 rounded text-[11px] font-semibold transition">
+                  Humanities Streams
+                </button>
+                <button type="button" onclick="Settings.toggleSelectAllAssignClasses(false)"
+                  class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[11px] font-semibold transition">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Grouped Checkboxes Container (Year Groups 7 through 13) -->
+            <div id="assignClassCheckboxContainer" class="p-3 bg-white border border-slate-300 rounded-xl max-h-64 overflow-y-auto space-y-3">
+              <!-- Rendered dynamically by js/settings.js with Year 7-13 groups -->
+            </div>
+
+            <!-- PROMINENT DIRECT ACTION BUTTON: Assign Selected Classes -->
+            <div class="pt-2">
+              <button type="button" onclick="Settings.handleAddTeacherAssignment()" id="assignTeacherModalInlineBtn"
+                class="w-full py-3 bg-indigo-800 hover:bg-indigo-900 text-white text-xs sm:text-sm font-extrabold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-plus-circle text-sm text-indigo-300"></i>
+                <span id="assignTeacherModalInlineBtnText">Assign Selected Classes to Teacher</span>
+              </button>
+            </div>
+
+            <!-- Quick Add Custom Stream Input -->
+            <div class="mt-2.5 pt-2.5 border-t border-indigo-200/80 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div class="flex items-center gap-2 flex-grow">
+                <select id="assignCustomStreamYg" class="px-2 py-1.5 text-xs bg-white border border-slate-300 rounded-lg font-bold text-slate-700">
+                  <option value="Year 7">Year 7</option>
+                  <option value="Year 8">Year 8</option>
+                  <option value="Year 9">Year 9</option>
+                  <option value="Year 10">Year 10</option>
+                  <option value="Year 11">Year 11</option>
+                  <option value="Year 12">Year 12</option>
+                  <option value="Year 13" selected>Year 13</option>
+                </select>
+                <div class="relative flex-grow">
+                  <i class="fa-solid fa-tag absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+                  <input type="text" id="assignCustomStreamInput"
+                    placeholder="Add custom stream (e.g. Science, Humanities)..."
+                    class="w-full pl-7 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:outline-none placeholder-slate-400"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault(); Settings.addCustomStreamCheckbox();}" />
+                </div>
+              </div>
+              <button type="button" onclick="Settings.addCustomStreamCheckbox()"
+                class="px-3 py-1.5 bg-indigo-900 hover:bg-indigo-950 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 flex items-center justify-center">
+                <i class="fa-solid fa-plus mr-1"></i> Add Stream
+              </button>
+            </div>
+          </div>
+
+          <!-- Add Button -->
+          <div class="flex justify-end pt-1">
+            <button onclick="Settings.handleAddTeacherAssignment()"
+              class="px-5 py-2.5 bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center">
+              <i class="fa-solid fa-plus-circle mr-1.5 text-sm"></i> Add Selected Assignments
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Current Teaching Assignments Table -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <p class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Current Teaching Assignments</p>
+              <p class="text-[11px] text-slate-500">Subjects &amp; classes currently assigned to this teacher</p>
+            </div>
+            <span id="assignTeacherCurrentCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200">
+              0 active assignments
+            </span>
+          </div>
+
+          <div class="overflow-x-auto overflow-y-auto max-h-56 rounded-xl border border-slate-200 shadow-sm">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                <tr>
+                  <th class="py-2.5 px-3">Subject</th>
+                  <th class="py-2.5 px-3">Year Group</th>
+                  <th class="py-2.5 px-3">Class / Stream</th>
+                  <th class="py-2.5 px-3 text-right">Remove</th>
+                </tr>
+              </thead>
+              <tbody id="teacherAssignmentsTableBody">
+                <tr>
+                  <td colspan="4" class="py-6 text-center text-xs text-slate-400">No assignments yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Footer Actions with Primary Assign Button -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-100 shrink-0">
+          <button type="button" onclick="Settings.closeAssignTeacherModal()"
+            class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+            Close
+          </button>
+          <button type="button" onclick="Settings.handleAddTeacherAssignment()" id="assignTeacherModalFooterBtn"
+            class="px-6 py-2.5 bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-extrabold rounded-xl shadow-md hover:shadow-lg transition flex items-center space-x-2">
+            <i class="fa-solid fa-check-circle text-indigo-300 mr-1.5"></i>
+            <span id="assignTeacherModalFooterBtnText">Assign Selected Classes</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: BULK REPORT GENERATION PROGRESS -->
+  <!-- ============================================================== -->
+  <div id="bulkProgressModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center animate-fade-in border border-slate-200">
+      <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-800 flex items-center justify-center text-2xl mx-auto mb-4 animate-bounce">
+        <i class="fa-solid fa-file-zipper"></i>
+      </div>
+      <h3 class="font-bold text-base text-slate-900">Generating Terminal Reports</h3>
+      <p id="bulkProgressText" class="text-xs text-slate-500 mt-1 mb-4">Processing reports...</p>
+      
+      <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200 mb-2">
+        <div id="bulkProgressBar" class="bg-blue-800 h-3 rounded-full transition-all duration-200" style="width: 0%"></div>
+      </div>
+      <p class="text-[11px] text-slate-400">Please do not close the browser window.</p>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="appToast" class="fixed bottom-5 right-5 z-50 hidden flex items-center p-4 rounded-xl shadow-2xl text-sm font-medium transition-all duration-300">
+    <i id="appToastIcon" class="fa-solid fa-circle-check text-emerald-400 mr-3 text-lg"></i>
+    <span id="appToastText">Action completed successfully.</span>
+  </div>
+
+  <!-- Core Application Scripts -->
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/report-assets.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/students.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
