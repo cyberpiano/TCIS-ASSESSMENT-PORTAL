@@ -54,6 +54,7 @@ const DEFAULT_SETTINGS = {
   schoolMotto: "Excellence, Integrity and Christian Leadership",
   defaultAcademicYear: "2025/2026",
   defaultTerm: "Term 1",
+  academicYears: ["2024/2025", "2025/2026", "2026/2027"],
   headteacherName: "Dr. Emmanuel Mensah (Headmaster)",
   reportFooter: "Official Terminal Report - Temple Christian International School. Any alteration invalidates this document.",
   categoryWeights: {
@@ -6953,145 +6954,7 @@ const SEED_STUDENTS = [
   }
 ];
 
-const SEED_RESULTS = [
-  // Kofi Owusu-Ansah (Year 10) Term 1 results
-  {
-    id: "std_001_2025/2026_Term 1_Mathematics",
-    studentId: "std_001",
-    admissionNumber: "TCIS/2024/001",
-    studentName: "Kofi Owusu-Ansah",
-    yearGroup: "Year 10",
-    className: "Year 10 Alpha",
-    subjectName: "Mathematics",
-    academicYear: "2025/2026",
-    term: "Term 1",
-    assessments: {
-      exercise: { score: 19, max: 20 },
-      homework: { score: 10, max: 10 },
-      progressiveTest: { score: 38, max: 40 },
-      midTerm: { score: 96, max: 100 },
-      endOfTerm: { score: 95, max: 100 }
-    },
-    categoryPercentages: {
-      exercise: 95.0,
-      homework: 100.0,
-      progressiveTest: 95.0,
-      midTerm: 96.0,
-      endOfTerm: 95.0
-    },
-    categoryWeights: { exercise: 10, homework: 10, progressiveTest: 20, midTerm: 20, endOfTerm: 40 },
-    finalPercentage: 95.7,
-    grade: "A*",
-    gradePoint: 4.00,
-    gradeDescription: "Distinction",
-    teacherComment: "Outstanding analytical and problem solving capability.",
-    overallTeacherComment: "Exceptional academic performance this term. Keep up the high standard.",
-    createdBy: "admin@tcis.edu",
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: "std_001_2025/2026_Term 1_English Language",
-    studentId: "std_001",
-    admissionNumber: "TCIS/2024/001",
-    studentName: "Kofi Owusu-Ansah",
-    yearGroup: "Year 10",
-    className: "Year 10 Alpha",
-    subjectName: "English Language",
-    academicYear: "2025/2026",
-    term: "Term 1",
-    assessments: {
-      exercise: { score: 18, max: 20 },
-      homework: { score: 9, max: 10 },
-      progressiveTest: { score: 34, max: 40 },
-      midTerm: { score: 85, max: 100 },
-      endOfTerm: { score: 82, max: 100 }
-    },
-    categoryPercentages: {
-      exercise: 90.0,
-      homework: 90.0,
-      progressiveTest: 85.0,
-      midTerm: 85.0,
-      endOfTerm: 82.0
-    },
-    categoryWeights: { exercise: 10, homework: 10, progressiveTest: 20, midTerm: 20, endOfTerm: 40 },
-    finalPercentage: 84.8,
-    grade: "A",
-    gradePoint: 3.67,
-    gradeDescription: "Excellent",
-    teacherComment: "Expressive essay writing and good command of grammar.",
-    overallTeacherComment: "Exceptional academic performance this term. Keep up the high standard.",
-    createdBy: "admin@tcis.edu",
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: "std_001_2025/2026_Term 1_Physics",
-    studentId: "std_001",
-    admissionNumber: "TCIS/2024/001",
-    studentName: "Kofi Owusu-Ansah",
-    yearGroup: "Year 10",
-    className: "Year 10 Alpha",
-    subjectName: "Physics",
-    academicYear: "2025/2026",
-    term: "Term 1",
-    assessments: {
-      exercise: { score: 16, max: 20 },
-      homework: { score: 8, max: 10 },
-      progressiveTest: { score: 32, max: 40 },
-      midTerm: { score: 76, max: 100 },
-      endOfTerm: { score: 78, max: 100 }
-    },
-    categoryPercentages: {
-      exercise: 80.0,
-      homework: 80.0,
-      progressiveTest: 80.0,
-      midTerm: 76.0,
-      endOfTerm: 78.0
-    },
-    categoryWeights: { exercise: 10, homework: 10, progressiveTest: 20, midTerm: 20, endOfTerm: 40 },
-    finalPercentage: 78.4,
-    grade: "B+",
-    gradePoint: 3.33,
-    gradeDescription: "Very Good",
-    teacherComment: "Good grasp of kinematics and dynamics experiments.",
-    overallTeacherComment: "Exceptional academic performance this term. Keep up the high standard.",
-    createdBy: "admin@tcis.edu",
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: "std_001_2025/2026_Term 1_Computer Science",
-    studentId: "std_001",
-    admissionNumber: "TCIS/2024/001",
-    studentName: "Kofi Owusu-Ansah",
-    yearGroup: "Year 10",
-    className: "Year 10 Alpha",
-    subjectName: "Computer Science",
-    academicYear: "2025/2026",
-    term: "Term 1",
-    assessments: {
-      exercise: { score: 15, max: 20 },
-      homework: { score: 8, max: 10 },
-      progressiveTest: { score: 30, max: 40 },
-      midTerm: { score: 72, max: 100 },
-      endOfTerm: { score: 70, max: 100 }
-    },
-    categoryPercentages: {
-      exercise: 75.0,
-      homework: 80.0,
-      progressiveTest: 75.0,
-      midTerm: 72.0,
-      endOfTerm: 70.0
-    },
-    categoryWeights: { exercise: 10, homework: 10, progressiveTest: 20, midTerm: 20, endOfTerm: 40 },
-    finalPercentage: 72.9,
-    grade: "B",
-    gradePoint: 3.00,
-    gradeDescription: "Good",
-    teacherComment: "Shows keen interest in algorithms and coding.",
-    overallTeacherComment: "Exceptional academic performance this term. Keep up the high standard.",
-    createdBy: "admin@tcis.edu",
-    updatedAt: new Date().toISOString()
-  }
-];
+const SEED_RESULTS = [];
 
 // Clean up any old demo mode flags
 try {
@@ -7396,6 +7259,29 @@ const DB = {
     results = results.filter(r => r.id !== docId);
     localStorage.setItem("tcis_results", JSON.stringify(results));
     return true;
+  },
+
+  async clearAllResults() {
+    let deletedCount = 0;
+    if (isLiveFirebase && firestoreDb) {
+      try {
+        const snap = await firestoreDb.collection("results").get();
+        deletedCount = snap.size;
+        const docs = snap.docs;
+        for (let i = 0; i < docs.length; i += 400) {
+          const batch = firestoreDb.batch();
+          const chunk = docs.slice(i, i + 400);
+          chunk.forEach(doc => batch.delete(doc.ref));
+          await batch.commit();
+        }
+        console.log(`TCIS: Cleared ${deletedCount} results documents from Firestore.`);
+      } catch (err) {
+        console.warn("Firestore error clearing results:", err);
+      }
+    }
+    localStorage.removeItem("tcis_results");
+    localStorage.setItem("tcis_results", JSON.stringify([]));
+    return deletedCount;
   },
 
   // Users (for Authentication & Role management)

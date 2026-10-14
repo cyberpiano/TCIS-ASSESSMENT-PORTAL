@@ -17,6 +17,17 @@ const Dashboard = {
     this.currentSettings = await window.DB.getSettings();
     this.applySettingsToUI();
 
+    // 2b. One-time production results cleanup for clean slate
+    if (!localStorage.getItem("tcis_prod_results_cleared_v1")) {
+      try {
+        await window.DB.clearAllResults();
+        localStorage.setItem("tcis_prod_results_cleared_v1", "true");
+        console.log("TCIS: Production cleanup executed - all test results cleared.");
+      } catch (err) {
+        console.warn("Production results cleanup:", err);
+      }
+    }
+
     // 3. Setup Navigation & Layout
     this.setupSidebar();
     this.setupUserUI();
@@ -26,6 +37,9 @@ const Dashboard = {
     if (window.Results) await window.Results.init();
     if (window.Reports) await window.Reports.init();
     if (window.Settings && window.Auth.isAdmin()) await window.Settings.init();
+
+    // Ensure all dropdowns are synchronized with active settings
+    this.syncAcademicYears(this.currentSettings);
 
     // 5. Auto-seed subjects if none exist yet (first run)
     if (window.DB && window.Auth.isAdmin()) {
@@ -54,6 +68,151 @@ const Dashboard = {
     mottoEls.forEach(el => {
       el.textContent = s.schoolMotto || "Excellence, Integrity and Christian Leadership";
     });
+
+    this.syncAcademicYears(s);
+  },
+
+  syncAcademicYears(settings) {
+    const s = settings || this.currentSettings || {};
+    const defaultYear = (s.defaultAcademicYear || "2025/2026").trim();
+    const defaultTerm = (s.defaultTerm || "Term 1").trim();
+
+    // Collect all academic years
+    let years = Array.isArray(s.academicYears) ? [...s.academicYears] : [];
+    if (!years.includes("2024/2025")) years.push("2024/2025");
+    if (!years.includes("2025/2026")) years.push("2025/2026");
+    if (defaultYear && !years.includes(defaultYear)) years.push(defaultYear);
+
+    // Clean, trim, and deduplicate
+    years = Array.from(new Set(years.map(y => String(y).trim()).filter(Boolean)));
+
+    // Sort descending (newest first, e.g. 2026/2027, 2025/2026, 2024/2025)
+    years.sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, "").slice(0, 4), 10) || 0;
+      const numB = parseInt(b.replace(/\D/g, "").slice(0, 4), 10) || 0;
+      if (numA !== numB) return numB - numA;
+      return b.localeCompare(a);
+    });
+
+    const escape = (str) => {
+      return String(str || "").replace(/[<>&'"]/g, c => {
+        switch (c) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case '\'': return '&#39;';
+          case '"': return '&quot;';
+          default: return c;
+        }
+      });
+    };
+
+    // 1. Result Entry Academic Year dropdown
+    const resultsYearSelect = document.getElementById("resultsAcademicYear");
+    if (resultsYearSelect) {
+      const currentVal = resultsYearSelect.value;
+      resultsYearSelect.innerHTML = years.map(y => `<option value="${escape(y)}">${escape(y)}</option>`).join("");
+      if (currentVal && years.includes(currentVal)) {
+        resultsYearSelect.value = currentVal;
+      } else {
+        resultsYearSelect.value = defaultYear;
+      }
+    }
+
+    // 2. Result Entry Term dropdown
+    const resultsTermSelect = document.getElementById("resultsTerm");
+    if (resultsTermSelect && defaultTerm && !resultsTermSelect.value) {
+      resultsTermSelect.value = defaultTerm;
+    }
+
+    // 3. Report Academic Year dropdown
+    const reportYearSelect = document.getElementById("reportAcademicYear");
+    if (reportYearSelect) {
+      const currentVal = reportYearSelect.value;
+      reportYearSelect.innerHTML = years.map(y => `<option value="${escape(y)}">${escape(y)}</option>`).join("");
+      if (currentVal && years.includes(currentVal)) {
+        reportYearSelect.value = currentVal;
+      } else {
+        reportYearSelect.value = defaultYear;
+      }
+    }
+
+    // 4. Report Term dropdown
+    const reportTermSelect = document.getElementById("reportTerm");
+    if (reportTermSelect && defaultTerm && !reportTermSelect.value) {
+      reportTermSelect.value = defaultTerm;
+    }
+
+    // 5. Excel Export Academic Year dropdown
+    const exportYearSelect = document.getElementById("exportAcademicYear");
+    if (exportYearSelect) {
+      const currentVal = exportYearSelect.value;
+      exportYearSelect.innerHTML = `<option value="ALL">All Academic Years</option>` +
+        years.map(y => `<option value="${escape(y)}">${escape(y)}</option>`).join("");
+      if (currentVal && (currentVal === "ALL" || years.includes(currentVal))) {
+        exportYearSelect.value = currentVal;
+      } else {
+        exportYearSelect.value = defaultYear;
+      }
+    }
+
+    // 6. Student Registration Form Academic Year (if present)
+    const studentFormYear = document.getElementById("studentFormAcademicYear");
+    if (studentFormYear) {
+      const currentVal = studentFormYear.value;
+      studentFormYear.innerHTML = years.map(y => `<option value="${escape(y)}">${escape(y)}</option>`).join("");
+      if (currentVal && years.includes(currentVal)) {
+        studentFormYear.value = currentVal;
+      } else {
+        studentFormYear.value = defaultYear;
+      }
+    }
+
+    // 7. Render chips in Settings page
+    this.renderSettingsAcademicYearsChips(years, defaultYear);
+  },
+
+  renderSettingsAcademicYearsChips(years, defaultYear) {
+    const container = document.getElementById("settingsAcademicYearsList");
+    if (!container) return;
+
+    const escape = (str) => {
+      return String(str || "").replace(/[<>&'"]/g, c => {
+        switch (c) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case '\'': return '&#39;';
+          case '"': return '&quot;';
+          default: return c;
+        }
+      });
+    };
+
+    let html = "";
+    years.forEach(y => {
+      const isActive = (y === defaultYear);
+      if (isActive) {
+        html += `
+          <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-tcis-navy text-white shadow-sm border border-tcis-navy">
+            <i class="fa-solid fa-calendar-check mr-1.5 text-tcis-gold"></i>
+            ${escape(y)}
+            <span class="ml-1.5 px-1.5 py-0.5 text-[9px] bg-tcis-gold text-tcis-navy-dark rounded font-black uppercase tracking-wider">Active</span>
+          </span>
+        `;
+      } else {
+        html += `
+          <button type="button" onclick="Settings.selectDefaultAcademicYear('${escape(y)}')"
+            title="Click to make ${escape(y)} active"
+            class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-300 hover:border-tcis-navy hover:text-tcis-navy transition shadow-sm">
+            <i class="fa-regular fa-calendar mr-1.5 text-slate-400"></i>
+            ${escape(y)}
+          </button>
+        `;
+      }
+    });
+
+    container.innerHTML = html;
   },
 
   setupUserUI() {

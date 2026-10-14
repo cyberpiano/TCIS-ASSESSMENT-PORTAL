@@ -223,6 +223,9 @@ const Reports = {
   // 4. UI INITIALIZATION & EVENT HANDLERS
   // ==========================================
   async init() {
+    if (window.Dashboard && window.Dashboard.syncAcademicYears && window.Dashboard.currentSettings) {
+      window.Dashboard.syncAcademicYears(window.Dashboard.currentSettings);
+    }
     this.setupDropdowns();
     this.setupEventListeners();
   },
@@ -440,10 +443,10 @@ const Reports = {
             ${reportTitle} for ${escapeHtml(student.fullName)}
           </h2>
           <p class="text-xs sm:text-sm font-semibold text-slate-800">
-            Class/Year: ${escapeHtml(student.yearGroup || student.className || '—')}
+            ${escapeHtml(academicYear)} Academic Year &mdash; ${escapeHtml(term)}
           </p>
           <p class="text-xs sm:text-sm font-semibold text-slate-800">
-            Term: ${escapeHtml(term)}
+            Class/Year: ${escapeHtml(student.yearGroup || student.className || '—')}
           </p>
         </div>
 
@@ -551,129 +554,124 @@ const Reports = {
     const overallComment = this.currentStudentResults.find(r => r.overallTeacherComment && r.overallTeacherComment.trim())?.overallTeacherComment || "Good academic conduct and steady progress exhibited.";
     const headteacherComment = settings.headteacherName ? `Approved by ${settings.headteacherName}. Satisfactory effort shown.` : "Approved by the Headteacher.";
 
+    const bannerSrc = window.REPORT_ASSETS?.banner || "tcis-header-banner.png";
+    const signatureSrc = window.REPORT_ASSETS?.signature || "signature head of academics.jpg";
+
+    const gpaTableRowsHtml = this.TCIS_SCALE_REFERENCE.map(row => `
+      <tr class="border-b border-slate-300 text-xs">
+        <td class="border border-slate-300 py-1.5 px-3 text-center font-bold text-slate-800">${row.grade}</td>
+        <td class="border border-slate-300 py-1.5 px-3 text-center text-slate-700">${row.range}</td>
+        <td class="border border-slate-300 py-1.5 px-3 text-center text-slate-700">${row.gpa}</td>
+        <td class="border border-slate-300 py-1.5 px-3 text-center text-slate-700">${row.remark}</td>
+      </tr>
+    `).join("");
+
     container.innerHTML = `
-      <div class="p-4 sm:p-6 text-slate-900">
-        <!-- School Header -->
-        <div class="border-b-2 border-tcis-gold pb-4 mb-4 text-center relative">
-          <div class="flex items-center justify-center space-x-4 mb-2">
-            <img src="tcis-crest.png" alt="TCIS Logo" class="h-16 w-auto object-contain shrink-0" onerror="this.onerror=null; this.src='tcis-logo.png';" />
-            <div class="text-left">
-              <h2 class="font-crest text-xl sm:text-2xl font-extrabold tracking-wide text-tcis-navy uppercase">
-                ${escapeHtml(settings.schoolName || "TEMPLE CHRISTIAN INTERNATIONAL SCHOOL")}
-              </h2>
-              <p class="text-xs italic text-tcis-gold font-semibold">
-                "${escapeHtml(settings.schoolMotto || "Excellence, Integrity and Christian Leadership")}"
-              </p>
-              <p class="text-[11px] text-slate-500 mt-0.5">
-                ${escapeHtml(settings.schoolAddress || "Accra, Ghana")}
-              </p>
-            </div>
-          </div>
-          <div class="mt-2 inline-block bg-tcis-navy text-white text-xs uppercase tracking-widest font-bold py-1 px-4 rounded-md">
-            STUDENT TERMINAL REPORT
-          </div>
+      <div class="max-w-2xl mx-auto py-2 px-4 sm:px-6 text-slate-900 font-sans" style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+        <!-- School Crest Header Banner -->
+        <div class="text-center mb-6 pt-2">
+          <img src="${bannerSrc}" alt="TEMPLE CHRISTIAN INTERNATIONAL SCHOOL" class="h-20 max-w-full mx-auto object-contain" />
         </div>
 
-        <!-- Student Metadata Box -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 text-xs grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div>
-            <span class="text-[10px] text-slate-400 uppercase font-bold block">Student Full Name</span>
-            <span class="font-bold text-slate-900 text-sm">${escapeHtml(student.fullName || "—")}</span>
-          </div>
-          <div>
-            <span class="text-[10px] text-slate-400 uppercase font-bold block">Admission Number</span>
-            <span class="font-mono font-bold text-tcis-navy text-sm">${escapeHtml(student.admissionNumber || "—")}</span>
-          </div>
-          <div>
-            <span class="text-[10px] text-slate-400 uppercase font-bold block">Year Group &amp; Class</span>
-            <span class="font-semibold text-slate-800">${escapeHtml(student.yearGroup || "—")}</span> &bull; 
-            <span class="text-slate-600">${escapeHtml(student.className || "Standard")}</span>
-          </div>
-          <div>
-            <span class="text-[10px] text-slate-400 uppercase font-bold block">Academic Term</span>
-            <span class="font-semibold text-slate-800">${escapeHtml(academicYear)}</span> (<span class="font-semibold text-blue-900">${escapeHtml(term)}</span>)
-          </div>
-          <div class="col-span-2 sm:col-span-4 pt-1 border-t border-slate-200 flex justify-between text-[11px] text-slate-500">
-            <span>Date Issued: <strong class="text-slate-700">${new Date().toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' })}</strong></span>
-            <span>Official Document &bull; Temple Christian International School</span>
-          </div>
+        <!-- Report Title & Student Meta -->
+        <div class="mb-5 text-center space-y-1">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight uppercase">
+            Full Terminal Report
+          </h2>
+          <p class="text-xs sm:text-sm font-semibold text-slate-800">
+            ${escapeHtml(academicYear)} Academic Year &mdash; ${escapeHtml(term)}
+          </p>
+          <p class="text-xs sm:text-sm font-semibold text-slate-800">
+            ${escapeHtml(student.fullName || "—")}
+          </p>
+          <p class="text-xs text-slate-600">
+            Class/Year: ${escapeHtml(student.yearGroup || "—")}
+            &nbsp;&bull;&nbsp;
+            Adm. No: ${escapeHtml(student.admissionNumber || "—")}
+          </p>
         </div>
 
         <!-- Academic Results Table -->
-        <div class="overflow-x-auto mb-5 border border-slate-200 rounded-lg">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-tcis-navy text-white text-[11px] font-bold">
-              <tr>
-                <th class="py-2.5 px-3">Subject</th>
-                <th class="py-2.5 px-2 text-center">Ex. (10%)</th>
-                <th class="py-2.5 px-2 text-center">HW (10%)</th>
-                <th class="py-2.5 px-2 text-center">Prog. (20%)</th>
-                <th class="py-2.5 px-2 text-center">Mid (20%)</th>
-                <th class="py-2.5 px-2 text-center">End (40%)</th>
-                <th class="py-2.5 px-2 text-center">Final Score</th>
-                <th class="py-2.5 px-2 text-center">Grade</th>
-                <th class="py-2.5 px-2 text-center">GP</th>
-                <th class="py-2.5 px-3">Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${tableRowsHtml}
-            </tbody>
-          </table>
+        <table class="w-full border-collapse border border-slate-300 text-xs mb-3 text-center">
+          <thead>
+            <tr class="font-bold border-b border-slate-300 bg-white">
+              <th class="border border-slate-300 py-2.5 px-3 text-center">Subject</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">Ex. (10%)</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">HW (10%)</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">Prog. (20%)</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">Mid (20%)</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">End (40%)</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">Final Score</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">Grade</th>
+              <th class="border border-slate-300 py-2.5 px-2 text-center">GP</th>
+              <th class="border border-slate-300 py-2.5 px-3 text-center">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRowsHtml}
+          </tbody>
+        </table>
+
+        <!-- Overall GPA Summary -->
+        <div class="font-bold text-sm text-slate-900 my-4 text-left flex flex-wrap gap-6">
+          <span>Overall Average: ${summary.averagePercentageFormatted}</span>
+          <span>Term GPA: ${summary.gpaFormatted}</span>
+          <span>Subjects: ${summary.completedCount} completed${summary.incompleteCount > 0 ? `, ${summary.incompleteCount} incomplete` : ""}</span>
         </div>
 
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 text-center">
-          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <span class="text-[10px] uppercase font-bold text-slate-500 block">Overall Average</span>
-            <span class="text-base font-extrabold text-tcis-navy">${summary.averagePercentageFormatted}</span>
-          </div>
-          <div class="bg-amber-50 p-2.5 rounded-lg border border-amber-200">
-            <span class="text-[10px] uppercase font-bold text-amber-800 block">Term GPA (Max 4.00)</span>
-            <span class="text-base font-extrabold text-amber-900">${summary.gpaFormatted}</span>
-          </div>
-          <div class="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
-            <span class="text-[10px] uppercase font-bold text-emerald-800 block">Completed Subjects</span>
-            <span class="text-base font-extrabold text-emerald-900">${summary.completedCount} Subject(s)</span>
-          </div>
-          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <span class="text-[10px] uppercase font-bold text-slate-500 block">Incomplete Subjects</span>
-            <span class="text-base font-extrabold text-slate-700">${summary.incompleteCount} Subject(s)</span>
-          </div>
-        </div>
+        <!-- GPA Reference Scale Table -->
+        <div class="text-left font-bold text-xs text-slate-900 mb-1.5">GPA Table</div>
+        <table class="w-full border-collapse border border-slate-300 text-xs text-center mb-6">
+          <thead>
+            <tr class="font-bold border-b border-slate-300 bg-white">
+              <th class="border border-slate-300 py-1.5 px-2 text-center">GRADE</th>
+              <th class="border border-slate-300 py-1.5 px-2 text-center">PERCENTAGE RANGE</th>
+              <th class="border border-slate-300 py-1.5 px-2 text-center">GRADE POINT RANGE</th>
+              <th class="border border-slate-300 py-1.5 px-2 text-center">REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${gpaTableRowsHtml}
+          </tbody>
+        </table>
 
         <!-- Remarks Section -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 space-y-2.5 text-xs">
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 space-y-2 text-xs">
           <div class="flex items-start">
-            <span class="font-bold text-tcis-navy w-44 flex-shrink-0">Class Teacher's General Remark:</span>
+            <span class="font-bold text-slate-800 w-44 flex-shrink-0">Class Teacher's Remark:</span>
             <span class="text-slate-700 italic">"${escapeHtml(overallComment)}"</span>
           </div>
           <div class="flex items-start">
-            <span class="font-bold text-tcis-navy w-44 flex-shrink-0">Headteacher's Remark:</span>
+            <span class="font-bold text-slate-800 w-44 flex-shrink-0">Headteacher's Remark:</span>
             <span class="text-slate-700 italic">"${escapeHtml(headteacherComment)}"</span>
           </div>
         </div>
 
-        <!-- Signatures Section -->
-        <div class="grid grid-cols-3 gap-6 pt-6 mb-4 text-center text-xs">
-          <div>
-            <div class="border-b border-slate-400 pb-8 mb-1"></div>
-            <span class="font-bold text-slate-700">Class Teacher's Signature</span>
-          </div>
-          <div>
-            <div class="border-b border-slate-400 pb-8 mb-1"></div>
-            <span class="font-bold text-slate-700">Headteacher's Signature &amp; Stamp</span>
-          </div>
-          <div>
-            <div class="border-b border-slate-400 pb-8 mb-1"></div>
-            <span class="font-bold text-slate-700">Parent / Guardian's Signature</span>
+        <!-- Official Head of Academics Signature Block -->
+        <div class="flex justify-end pt-2 pb-4">
+          <div class="text-center w-56">
+            <div class="h-12 flex items-center justify-center">
+              <img src="${signatureSrc}" alt="Signature" class="max-h-12 max-w-full object-contain" />
+            </div>
+            <p class="text-slate-500 text-xs font-mono -mt-0.5 select-none tracking-normal">............................</p>
+            <p class="text-xs font-bold text-slate-900 mt-1">Mr. Emmanuel Elikplim Godzo</p>
+            <p class="text-[11px] font-medium text-slate-600">Head of Academics</p>
           </div>
         </div>
 
-        <!-- Confidentiality & Footer -->
+        <!-- Footer -->
         <div class="border-t border-slate-200 pt-3 text-center text-[10px] text-slate-400">
           <span>${escapeHtml(settings.reportFooter || "Official Terminal Report - Temple Christian International School. Any alteration invalidates this document.")}</span>
         </div>
+
+        <!-- Print Helper Button -->
+        <div class="text-center pt-4 pb-2 no-print">
+          <button onclick="Reports.printCurrentReport()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-lg shadow transition">
+            <i class="fa-solid fa-print mr-2"></i> Print Report
+          </button>
+        </div>
+
       </div>
     `;
   },
@@ -729,13 +727,13 @@ const Reports = {
     doc.setTextColor(0, 0, 0);
     doc.text(`${reportTitle} for ${student.fullName || "Student"}`, 105, currentY, { align: "center" });
 
-    currentY += 6;
+    currentY += 5.5;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9.5);
-    doc.text(`Class/Year: ${student.yearGroup || student.className || "—"}`, 105, currentY, { align: "center" });
+    doc.text(`${academicYear} Academic Year \u2014 ${term}`, 105, currentY, { align: "center" });
 
     currentY += 5.5;
-    doc.text(`Term: ${term}`, 105, currentY, { align: "center" });
+    doc.text(`Class/Year: ${student.yearGroup || student.className || "—"}`, 105, currentY, { align: "center" });
 
     // Results Table
     currentY += 4.5;
@@ -1189,25 +1187,34 @@ const Reports = {
 
     currentY += 16.5;
 
-    // Official Signature Lines
-    const sigColWidth = (pageWidth - (margin * 2) - 8) / 3;
-    const sigY = currentY + 6;
+    // Head of Academics Signature Block (Right Aligned)
+    const sigCenterX = pageWidth - margin - 35;
+    const signature = window.REPORT_ASSETS?.signature;
+    if (signature) {
+      try {
+        doc.addImage(signature, "JPEG", sigCenterX - 14, currentY + 1, 28, 10);
+      } catch (e) {
+        try {
+          doc.addImage(signature, "PNG", sigCenterX - 14, currentY + 1, 28, 10);
+        } catch (err) {
+          console.warn("Signature addImage error:", err);
+        }
+      }
+    }
 
-    doc.setDrawColor(148, 163, 184);
-    doc.setLineWidth(0.3);
-    doc.line(margin + 6, sigY, margin + 6 + sigColWidth - 12, sigY);
-    doc.setFontSize(7);
+    doc.setFont("courier", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text("............................", sigCenterX, currentY + 12, { align: "center" });
+
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(71, 85, 105);
-    doc.text("Class Teacher's Signature", margin + 6, sigY + 3.5);
-
-    const s2X = margin + 4 + sigColWidth;
-    doc.line(s2X + 2, sigY, s2X + sigColWidth - 10, sigY);
-    doc.text("Headteacher's Signature / Stamp", s2X + 2, sigY + 3.5);
-
-    const s3X = s2X + sigColWidth;
-    doc.line(s3X + 2, sigY, s3X + sigColWidth - 10, sigY);
-    doc.text("Parent / Guardian's Signature", s3X + 2, sigY + 3.5);
+    doc.setFontSize(8);
+    doc.setTextColor(0, 0, 0);
+    doc.text("Mr. Emmanuel Elikplim Godzo", sigCenterX, currentY + 15.5, { align: "center" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(70, 70, 70);
+    doc.text("Head of Academics", sigCenterX, currentY + 19, { align: "center" });
 
     // Document Footer
     doc.setFontSize(6.5);

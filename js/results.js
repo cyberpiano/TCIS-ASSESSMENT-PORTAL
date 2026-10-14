@@ -162,6 +162,9 @@ const Results = {
   ],
 
   async init() {
+    if (window.Dashboard && window.Dashboard.syncAcademicYears && window.Dashboard.currentSettings) {
+      window.Dashboard.syncAcademicYears(window.Dashboard.currentSettings);
+    }
     this.setupDropdowns();
     this.setupEventListeners();
   },

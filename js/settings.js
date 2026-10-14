@@ -237,6 +237,7 @@ const Settings = {
     this.setupEventListeners();
     await this.loadSubjectsList();
     await this.loadStaffUsersList();
+    await this.populateExportClassesDropdown();
   },
 
   setupEventListeners() {
@@ -309,8 +310,21 @@ const Settings = {
         previewImg.src = s.schoolLogo;
         previewImg.classList.remove("hidden");
       }
+
+      // Sync academic years across the application
+      if (window.Dashboard && window.Dashboard.syncAcademicYears) {
+        window.Dashboard.syncAcademicYears(s);
+      }
     } catch (err) {
       console.error("Error loading settings:", err);
+    }
+  },
+
+  selectDefaultAcademicYear(year) {
+    const input = document.getElementById("settingDefaultYear");
+    if (input) {
+      input.value = year;
+      this.showToast(`Selected ${year}. Click "Save School Settings & Weights" to set as active session.`, "info");
     }
   },
 
@@ -369,6 +383,20 @@ const Settings = {
       return;
     }
 
+    const defaultYear = document.getElementById("settingDefaultYear").value.trim();
+    if (!defaultYear) {
+      this.showToast("Default academic year is required (e.g. 2025/2026 or 2026/2027).", "warning");
+      return;
+    }
+
+    // Preserve existing academic years array and ensure new defaultYear is included
+    let academicYears = Array.isArray(this.currentSettings?.academicYears)
+      ? [...this.currentSettings.academicYears]
+      : ["2024/2025", "2025/2026"];
+    if (!academicYears.includes(defaultYear)) {
+      academicYears.push(defaultYear);
+    }
+
     const ex = parseFloat(document.getElementById("weightExercise").value || 0);
     const hw = parseFloat(document.getElementById("weightHomework").value || 0);
     const pr = parseFloat(document.getElementById("weightProgressive").value || 0);
@@ -389,8 +417,9 @@ const Settings = {
       schoolAddress: document.getElementById("settingSchoolAddress").value.trim(),
       contactDetails: document.getElementById("settingContactDetails").value.trim(),
       headteacherName: document.getElementById("settingHeadteacherName").value.trim(),
-      defaultAcademicYear: document.getElementById("settingDefaultYear").value.trim(),
+      defaultAcademicYear: defaultYear,
       defaultTerm: document.getElementById("settingDefaultTerm").value,
+      academicYears: academicYears,
       reportFooter: document.getElementById("settingReportFooter").value.trim(),
       schoolLogo: this.currentSettings?.schoolLogo || "tcis-logo.png",
       categoryWeights: {
@@ -414,8 +443,11 @@ const Settings = {
       if (window.Dashboard) {
         window.Dashboard.currentSettings = updated;
         window.Dashboard.applySettingsToUI();
+        if (window.Dashboard.syncAcademicYears) {
+          window.Dashboard.syncAcademicYears(updated);
+        }
       }
-      this.showToast("School settings and assessment weights saved successfully!", "success");
+      this.showToast(`School settings saved! Initiated Academic Year ${defaultYear} across Result Entry and Reports.`, "success");
     } catch (err) {
       console.error("Error saving settings:", err);
       this.showToast("Failed to save settings: " + err.message, "error");
@@ -1226,6 +1258,455 @@ const Settings = {
       this.showToast("Failed to update assignments: " + err.message, "error");
     }
   },
+
+  // ==========================================
+  // ACADEMIC DATA EXCEL EXPORT MODULE
+  // ==========================================
+
+  async populateExportClassesDropdown() {
+    const scopeSelect = document.getElementById("exportClassScope");
+    if (!scopeSelect) return;
+
+    try {
+      const students = (await window.DB.getStudents()) || [];
+      const classSet = new Set();
+      students.forEach(s => {
+        const cls = (s.className || s.yearGroup || "").trim();
+        if (cls) classSet.add(cls);
+      });
+
+      // Default standard classes
+      [
+        "Year 7", "Year 8", "Year 9", "Year 10", "Year 11",
+        "Year 12 Science", "Year 12 Humanities",
+        "Year 13 Science", "Year 13 Humanities"
+      ].forEach(c => classSet.add(c));
+
+      // Natural curriculum sort
+      const sortedClasses = Array.from(classSet).sort((a, b) => {
+        const numA = parseInt(a.replace(/\D/g, ""), 10) || 0;
+        const numB = parseInt(b.replace(/\D/g, ""), 10) || 0;
+        if (numA !== numB) return numA - numB;
+        return a.localeCompare(b);
+      });
+
+      let html = `<option value="ALL" selected>All Classes (Organized by Sheet)</option>`;
+      sortedClasses.forEach(cls => {
+        html += `<option value="${escapeHtml(cls)}">${escapeHtml(cls)}</option>`;
+      });
+      scopeSelect.innerHTML = html;
+    } catch (err) {
+      console.warn("Could not populate export classes dropdown:", err);
+    }
+  },
+
+  async exportAllAcademicDataExcel() {
+    const btn = document.getElementById("btnExportAllAcademicData");
+    const statusBadge = document.getElementById("exportStatusBadge");
+    const originalBtnHtml = btn ? btn.innerHTML : "";
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Exporting Academic Data...`;
+    }
+    if (statusBadge) {
+      statusBadge.innerHTML = `<span class="text-amber-600 font-bold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Gathering academic records...</span>`;
+    }
+
+    try {
+      const [allStudents, allResults] = await Promise.all([
+        window.DB.getStudents().catch(() => []),
+        window.DB.getResults().catch(() => [])
+      ]);
+
+      const academicYearFilter = document.getElementById("exportAcademicYear")?.value || "ALL";
+      const termFilter = document.getElementById("exportTerm")?.value || "ALL";
+      const classScopeFilter = document.getElementById("exportClassScope")?.value || "ALL";
+
+      // Build student lookup
+      const studentMap = {};
+      (allStudents || []).forEach(st => {
+        if (st.id) studentMap[st.id] = st;
+        if (st.admissionNumber) studentMap[st.admissionNumber] = st;
+      });
+
+      // Filter results
+      let filteredResults = (allResults || []).filter(r => {
+        if (academicYearFilter !== "ALL" && r.academicYear && r.academicYear !== academicYearFilter) {
+          return false;
+        }
+        if (termFilter !== "ALL" && r.term && r.term !== termFilter) {
+          return false;
+        }
+        const studentInfo = studentMap[r.studentId] || studentMap[r.admissionNumber] || {};
+        const effectiveClass = (r.className || studentInfo.className || r.yearGroup || studentInfo.yearGroup || "").trim();
+        if (classScopeFilter !== "ALL" && effectiveClass !== classScopeFilter) {
+          return false;
+        }
+        return true;
+      });
+
+      if (filteredResults.length === 0) {
+        this.showToast(`No academic results found for ${academicYearFilter} - ${termFilter}.`, "warning");
+        if (statusBadge) {
+          statusBadge.innerHTML = `<span class="text-amber-600">No records found for current filters</span>`;
+        }
+        return;
+      }
+
+      if (statusBadge) {
+        statusBadge.innerHTML = `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-gear fa-spin mr-1"></i> Formatting ${filteredResults.length} records...</span>`;
+      }
+
+      // Headers definition
+      const headers = [
+        "Admission No",
+        "Student Name",
+        "Class / Stream",
+        "Year Group",
+        "Academic Year",
+        "Term",
+        "Subject",
+        "Prog. Test 1 (/100)",
+        "Prog. Test 2 (/100)",
+        "Mid-Term Exam (/100)",
+        "End-of-Term Exam (/100)",
+        "Exercise Avg (%)",
+        "Final Percentage (%)",
+        "Final Grade",
+        "Grade Point (GPA)",
+        "Teacher Remark"
+      ];
+
+      // Format a single result into row array
+      const formatRow = (r) => {
+        const studentInfo = studentMap[r.studentId] || studentMap[r.admissionNumber] || {};
+        const admNo = r.admissionNumber || studentInfo.admissionNumber || "—";
+        const studentName = r.studentName || studentInfo.fullName || "—";
+        const className = r.className || studentInfo.className || r.yearGroup || studentInfo.yearGroup || "General";
+        const yearGroup = r.yearGroup || studentInfo.yearGroup || "—";
+        const acadYear = r.academicYear || "—";
+        const term = r.term || "—";
+        const subject = r.subjectName || "—";
+
+        // Score extractions
+        const p1 = r.assessments?.progressiveTest1?.score ?? r.assessments?.progressiveTest?.score;
+        const p2 = r.assessments?.progressiveTest2?.score;
+        const mid = r.assessments?.midTerm?.score;
+        const end = r.assessments?.endOfTerm?.score;
+
+        const p1Val = (p1 !== null && p1 !== undefined && p1 !== "" && !isNaN(Number(p1))) ? Number(p1) : "—";
+        const p2Val = (p2 !== null && p2 !== undefined && p2 !== "" && !isNaN(Number(p2))) ? Number(p2) : "—";
+        const midVal = (mid !== null && mid !== undefined && mid !== "" && !isNaN(Number(mid))) ? Number(mid) : "—";
+        const endVal = (end !== null && end !== undefined && end !== "" && !isNaN(Number(end))) ? Number(end) : "—";
+
+        const exPct = r.categoryPercentages?.exercise;
+        const exVal = (exPct !== null && exPct !== undefined && !isNaN(Number(exPct))) ? `${Number(exPct).toFixed(1)}%` : "—";
+
+        const finalPct = (r.finalPercentage !== null && r.finalPercentage !== undefined && !isNaN(Number(r.finalPercentage)))
+          ? `${Number(r.finalPercentage).toFixed(2)}%`
+          : "Incomplete";
+
+        let grade = r.grade || "—";
+        let gpa = (r.gradePoint !== null && r.gradePoint !== undefined && !isNaN(Number(r.gradePoint)))
+          ? Number(r.gradePoint).toFixed(2)
+          : "—";
+
+        if ((grade === "—" || gpa === "—") && r.finalPercentage != null && window.Reports?.getTCISGrade) {
+          const gi = window.Reports.getTCISGrade(r.finalPercentage);
+          if (gi) {
+            grade = gi.grade || "—";
+            gpa = gi.gradePoint != null ? Number(gi.gradePoint).toFixed(2) : "0.00";
+          }
+        }
+
+        const remarks = r.teacherComment || "—";
+
+        return [
+          admNo,
+          studentName,
+          className,
+          yearGroup,
+          acadYear,
+          term,
+          subject,
+          p1Val,
+          p2Val,
+          midVal,
+          endVal,
+          exVal,
+          finalPct,
+          grade,
+          gpa,
+          remarks
+        ];
+      };
+
+      // Natural sort comparator for records
+      const sortRecords = (a, b) => {
+        const studentInfoA = studentMap[a.studentId] || studentMap[a.admissionNumber] || {};
+        const studentInfoB = studentMap[b.studentId] || studentMap[b.admissionNumber] || {};
+        const clsA = (a.className || studentInfoA.className || a.yearGroup || "").trim();
+        const clsB = (b.className || studentInfoB.className || b.yearGroup || "").trim();
+
+        // Sort by class first
+        const numA = parseInt(clsA.replace(/\D/g, ""), 10) || 0;
+        const numB = parseInt(clsB.replace(/\D/g, ""), 10) || 0;
+        if (numA !== numB) return numA - numB;
+        if (clsA !== clsB) return clsA.localeCompare(clsB);
+
+        // Then student name
+        const nameA = (a.studentName || studentInfoA.fullName || "").trim();
+        const nameB = (b.studentName || studentInfoB.fullName || "").trim();
+        if (nameA !== nameB) return nameA.localeCompare(nameB);
+
+        // Then subject
+        return (a.subjectName || "").localeCompare(b.subjectName || "");
+      };
+
+      filteredResults.sort(sortRecords);
+
+      // Group records by class
+      const classGroups = {};
+      filteredResults.forEach(r => {
+        const studentInfo = studentMap[r.studentId] || studentMap[r.admissionNumber] || {};
+        const cls = (r.className || studentInfo.className || r.yearGroup || studentInfo.yearGroup || "General").trim();
+        if (!classGroups[cls]) classGroups[cls] = [];
+        classGroups[cls].push(r);
+      });
+
+      // Prepare multi-sheet data structure
+      const masterRows = filteredResults.map(formatRow);
+      const sheetsData = [];
+
+      // 1. All Classes Master Sheet (only if ALL classes or multiple classes)
+      sheetsData.push({
+        name: "All_Classes_Master",
+        headers,
+        rows: masterRows
+      });
+
+      // 2. Individual Class Sheets in natural order
+      const sortedClassNames = Object.keys(classGroups).sort((a, b) => {
+        const numA = parseInt(a.replace(/\D/g, ""), 10) || 0;
+        const numB = parseInt(b.replace(/\D/g, ""), 10) || 0;
+        if (numA !== numB) return numA - numB;
+        return a.localeCompare(b);
+      });
+
+      sortedClassNames.forEach(clsName => {
+        sheetsData.push({
+          name: clsName,
+          headers,
+          rows: classGroups[clsName].map(formatRow)
+        });
+      });
+
+      const cleanYearStr = academicYearFilter !== "ALL" ? academicYearFilter.replace(/[\\/]/g, "-") : "AllYears";
+      const cleanTermStr = termFilter !== "ALL" ? termFilter.replace(/\s+/g, "") : "AllTerms";
+      const filename = `TCIS_Academic_Results_${cleanYearStr}_${cleanTermStr}.xlsx`;
+
+      // Column widths definition for readability
+      const colWidths = [
+        { wch: 16 }, // Admission No
+        { wch: 26 }, // Student Name
+        { wch: 20 }, // Class / Stream
+        { wch: 12 }, // Year Group
+        { wch: 15 }, // Academic Year
+        { wch: 10 }, // Term
+        { wch: 28 }, // Subject
+        { wch: 20 }, // Progressive Test 1
+        { wch: 20 }, // Progressive Test 2
+        { wch: 20 }, // Mid-Term Exam
+        { wch: 22 }, // End-of-Term Exam
+        { wch: 15 }, // Exercise Avg (%)
+        { wch: 20 }, // Final Percentage (%)
+        { wch: 12 }, // Final Grade
+        { wch: 16 }, // Grade Point (GPA)
+        { wch: 36 }  // Teacher Remarks
+      ];
+
+      if (window.XLSX) {
+        const wb = window.XLSX.utils.book_new();
+        const existingSheetNames = new Set();
+
+        sheetsData.forEach(({ name, headers: hdr, rows: rws }) => {
+          let safeName = name.replace(/[\\/?*\[\]:]/g, "-").trim();
+          if (safeName.length > 28) safeName = safeName.substring(0, 28);
+          if (!safeName) safeName = "Class";
+          
+          let uniqueName = safeName;
+          let counter = 1;
+          while (existingSheetNames.has(uniqueName.toLowerCase())) {
+            uniqueName = `${safeName}_${counter}`;
+            counter++;
+          }
+          existingSheetNames.add(uniqueName.toLowerCase());
+
+          const wsData = [hdr, ...rws];
+          const ws = window.XLSX.utils.aoa_to_sheet(wsData);
+          ws["!cols"] = colWidths;
+          window.XLSX.utils.book_append_sheet(wb, ws, uniqueName);
+        });
+
+        window.XLSX.writeFile(wb, filename);
+      } else {
+        // Fallback: Excel XML Multi-sheet Workbook
+        const xml = this._generateMultiSheetXml(sheetsData);
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=utf-8" });
+        const fallbackFilename = filename.replace(/\.xlsx$/, ".xls");
+        if (window.saveAs) {
+          window.saveAs(blob, fallbackFilename);
+        } else {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = fallbackFilename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(a.href);
+        }
+      }
+
+      this.showToast(`Exported ${filteredResults.length} grades across ${sheetsData.length} sheets!`, "success");
+      if (statusBadge) {
+        statusBadge.innerHTML = `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Downloaded ${filteredResults.length} records across ${sheetsData.length} sheets</span>`;
+      }
+    } catch (err) {
+      console.error("Export academic data error:", err);
+      this.showToast("Failed to export academic data: " + err.message, "error");
+      if (statusBadge) {
+        statusBadge.innerHTML = `<span class="text-rose-600 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Export failed</span>`;
+      }
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = originalBtnHtml || `<i class="fa-solid fa-file-excel mr-2 text-sm"></i> Download Academic Data (Excel)`;
+      }
+    }
+  },
+
+  _generateMultiSheetXml(sheetsData) {
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="HeaderStyle">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#1A2B49"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#FFFFFF" ss:Bold="1"/>
+   <Interior ss:Color="#1A2B49" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="Center">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+  </Style>
+ </Styles>`;
+
+    const escapeXml = (str) => {
+      return String(str || "").replace(/[<>&'"]/g, c => {
+        switch (c) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case '\'': return '&apos;';
+          case '"': return '&quot;';
+          default: return c;
+        }
+      });
+    };
+
+    sheetsData.forEach(({ name, headers, rows }) => {
+      const safeName = escapeXml(name.replace(/[\\/?*\[\]:]/g, '-').substring(0, 31));
+      xml += `\n <Worksheet ss:Name="${safeName}">\n  <Table>`;
+      // Header row
+      xml += `\n   <Row ss:Height="24">`;
+      headers.forEach(h => {
+        xml += `\n    <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">${escapeXml(h)}</Data></Cell>`;
+      });
+      xml += `\n   </Row>`;
+      // Data rows
+      rows.forEach(r => {
+        xml += `\n   <Row ss:Height="20">`;
+        r.forEach(cell => {
+          const isNum = typeof cell === 'number';
+          const type = isNum ? 'Number' : 'String';
+          xml += `\n    <Cell ss:StyleID="${isNum ? 'Center' : 'Default'}"><Data ss:Type="${type}">${escapeXml(String(cell != null ? cell : ''))}</Data></Cell>`;
+        });
+        xml += `\n   </Row>`;
+      });
+      xml += `\n  </Table>\n </Worksheet>`;
+    });
+
+    xml += `\n</Workbook>`;
+    return xml;
+  },
+
+  // ==========================================
+  // PRODUCTION RESULTS RESET MODULE
+  // ==========================================
+
+  confirmClearAllResults() {
+    if (!window.Auth.isAdmin()) {
+      this.showToast("Administrative permissions required to clear examination results.", "error");
+      return;
+    }
+    const modal = document.getElementById("clearResultsConfirmModal");
+    if (modal) modal.classList.remove("hidden");
+  },
+
+  closeClearResultsModal() {
+    const modal = document.getElementById("clearResultsConfirmModal");
+    if (modal) modal.classList.add("hidden");
+  },
+
+  async handleClearAllResults() {
+    if (!window.Auth.isAdmin()) {
+      this.showToast("Administrative permissions required.", "error");
+      return;
+    }
+
+    const btn = document.getElementById("confirmClearResultsBtn");
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Clearing All Results...`;
+    }
+
+    try {
+      const deletedCount = await window.DB.clearAllResults();
+      localStorage.setItem("tcis_prod_results_cleared_v1", "true");
+
+      // Refresh any open results or reports
+      if (window.Results && window.Results.loadClassSheet) {
+        window.Results.loadClassSheet().catch(() => {});
+      }
+      if (window.Dashboard && window.Dashboard.updateDashboardStats) {
+        window.Dashboard.updateDashboardStats().catch(() => {});
+      }
+
+      this.closeClearResultsModal();
+      this.showToast(`All test results cleared (${deletedCount} records deleted). System is now ready for production!`, "success");
+    } catch (err) {
+      console.error("Error clearing results:", err);
+      this.showToast("Failed to clear results: " + err.message, "error");
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-trash-can mr-1.5"></i> Yes, Clear All Results`;
+      }
+    }
+  },
+
   showToast(message, type = "info") {
     if (window.Dashboard && window.Dashboard.showToast) {
       window.Dashboard.showToast(message, type);
