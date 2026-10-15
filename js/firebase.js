@@ -6235,23 +6235,43 @@ const DB = {
         console.warn("Firestore error getting students, falling back to local:", err);
       }
     }
-    if (!list || list.length === 0) {
-      const raw = localStorage.getItem("tcis_students");
-      list = raw ? JSON.parse(raw) : [...SEED_STUDENTS];
-    }
 
-    // Always enforce the official enrolledSubjects from SEED_STUDENTS for every student
-    if (list && Array.isArray(list)) {
-      SEED_STUDENTS.forEach(seed => {
-        const target = list.find(s => s.id === seed.id || (s.admissionNumber && s.admissionNumber === seed.admissionNumber));
-        if (target && Array.isArray(seed.enrolledSubjects)) {
-          target.enrolledSubjects = [...seed.enrolledSubjects];
+    const raw = localStorage.getItem("tcis_students");
+    const localList = raw ? JSON.parse(raw) : (typeof SEED_STUDENTS !== 'undefined' ? [...SEED_STUDENTS] : []);
+
+    if (!list || list.length === 0) {
+      list = localList;
+    } else if (localList && localList.length > 0) {
+      // Merge Firestore and localStorage by student ID, giving priority to newer updatedAt
+      const localMap = new Map();
+      localList.forEach(s => { if (s.id) localMap.set(s.id, s); });
+
+      list = list.map(remoteStudent => {
+        const localStudent = localMap.get(remoteStudent.id);
+        if (!localStudent) return remoteStudent;
+
+        if (localStudent.updatedAt && remoteStudent.updatedAt) {
+          if (new Date(localStudent.updatedAt) >= new Date(remoteStudent.updatedAt)) {
+            return { ...remoteStudent, ...localStudent };
+          }
+        } else if (localStudent.updatedAt) {
+          return { ...remoteStudent, ...localStudent };
+        }
+        return remoteStudent;
+      });
+
+      // Also preserve any local-only students
+      const remoteIds = new Set(list.map(s => s.id));
+      localList.forEach(s => {
+        if (s.id && !remoteIds.has(s.id)) {
+          list.push(s);
         }
       });
-      try {
-        localStorage.setItem("tcis_students", JSON.stringify(list));
-      } catch (e) {}
     }
+
+    try {
+      localStorage.setItem("tcis_students", JSON.stringify(list));
+    } catch (e) {}
 
     return list;
   },
@@ -6280,6 +6300,15 @@ const DB = {
     }
     studentData.updatedAt = now;
 
+    // 1. Update in-memory SEED_STUDENTS if present
+    if (typeof SEED_STUDENTS !== 'undefined' && Array.isArray(SEED_STUDENTS)) {
+      const sIdx = SEED_STUDENTS.findIndex(s => s.id === studentData.id);
+      if (sIdx >= 0) {
+        SEED_STUDENTS[sIdx] = { ...SEED_STUDENTS[sIdx], ...studentData };
+      }
+    }
+
+    // 2. Save to Firestore
     if (isLiveFirebase) {
       try {
         await firestoreDb.collection("students").doc(studentData.id).set(studentData, { merge: true });
@@ -6288,10 +6317,12 @@ const DB = {
       }
     }
 
-    const students = await this.getStudents();
+    // 3. Update localStorage
+    const raw = localStorage.getItem("tcis_students");
+    let students = raw ? JSON.parse(raw) : (typeof SEED_STUDENTS !== 'undefined' ? [...SEED_STUDENTS] : []);
     const idx = students.findIndex(s => s.id === studentData.id);
     if (idx >= 0) {
-      students[idx] = studentData;
+      students[idx] = { ...students[idx], ...studentData };
     } else {
       students.unshift(studentData);
     }
@@ -6307,9 +6338,16 @@ const DB = {
         console.warn("Firestore error deleting student:", err);
       }
     }
-    let students = await this.getStudents();
+    const raw = localStorage.getItem("tcis_students");
+    let students = raw ? JSON.parse(raw) : [];
     students = students.filter(s => s.id !== id);
     localStorage.setItem("tcis_students", JSON.stringify(students));
+
+    // Also remove from in-memory SEED_STUDENTS
+    if (typeof SEED_STUDENTS !== 'undefined' && Array.isArray(SEED_STUDENTS)) {
+      const sIdx = SEED_STUDENTS.findIndex(s => s.id === id);
+      if (sIdx >= 0) SEED_STUDENTS.splice(sIdx, 1);
+    }
 
     // Also remove associated results
     let results = await this.getResults();
@@ -6326,38 +6364,15 @@ const DB = {
     if (students && Array.isArray(students)) {
       SEED_STUDENTS.forEach(seed => {
         const found = students.find(s => s.id === seed.id);
-        if (found && Array.isArray(seed.enrolledSubjects)) {
-          found.enrolledSubjects = [...seed.enrolledSubjects];
+        // Only assign if student currently has NO enrolled subjects
+        if (found && (!found.enrolledSubjects || found.enrolledSubjects.length === 0)) {
+          found.enrolledSubjects = [...(seed.enrolledSubjects || [])];
           found.updatedAt = new Date().toISOString();
           modified = true;
         }
       });
       if (modified) {
         localStorage.setItem("tcis_students", JSON.stringify(students));
-      }
-    }
-
-    if (isLiveFirebase && firestoreDb) {
-      try {
-        const batch = firestoreDb.batch();
-        let ops = 0;
-        for (const seed of SEED_STUDENTS) {
-          if (seed.enrolledSubjects && seed.enrolledSubjects.length > 0) {
-            const ref = firestoreDb.collection("students").doc(seed.id);
-            batch.set(ref, { enrolledSubjects: seed.enrolledSubjects, updatedAt: new Date().toISOString() }, { merge: true });
-            ops++;
-            if (ops >= 450) {
-              await batch.commit();
-              ops = 0;
-            }
-          }
-        }
-        if (ops > 0) {
-          await batch.commit();
-        }
-        console.log("TCIS: Synced official enrolledSubjects to live Firestore.");
-      } catch (e) {
-        console.warn("Firestore sync official subjects warning:", e);
       }
     }
   },

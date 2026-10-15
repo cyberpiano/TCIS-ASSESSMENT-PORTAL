@@ -185,6 +185,8 @@ const Students = {
       this.allStudents = await window.DB.getStudents();
       this.updateClassFilterOptions();
       this.applyFilters();
+      this.updateLinkingClassFilterOptions();
+      this.renderSubjectLinkingTable();
       if (window.Dashboard) {
         window.Dashboard.updateDashboardStats();
       }
@@ -422,16 +424,7 @@ const Students = {
     const checkedBoxes = document.querySelectorAll("input[name='enrolledSubjectCheckbox']:checked");
     const enrolledSubjects = Array.from(checkedBoxes).map(cb => cb.value);
 
-    // Keep existing admission number if editing, or leave clean/empty
-    let admissionNumber = "";
-    if (this.currentEditingId) {
-      const existing = this.allStudents.find(s => s.id === this.currentEditingId);
-      if (existing && existing.admissionNumber) {
-        admissionNumber = existing.admissionNumber;
-      }
-    }
-
-    const studentData = {
+    let studentData = {
       fullName,
       yearGroup,
       className,
@@ -442,12 +435,14 @@ const Students = {
       enrolledSubjects
     };
 
-    if (admissionNumber) {
-      studentData.admissionNumber = admissionNumber;
-    }
-
     if (this.currentEditingId) {
+      const existing = this.allStudents.find(s => s.id === this.currentEditingId);
+      if (existing) {
+        studentData = { ...existing, ...studentData };
+      }
       studentData.id = this.currentEditingId;
+    } else {
+      studentData.admissionNumber = "";
     }
 
     const saveBtn = document.getElementById("saveStudentBtn");
