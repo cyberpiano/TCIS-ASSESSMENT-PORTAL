@@ -15,21 +15,39 @@ const Results = {
     if (!student || !subjectName) return false;
     const target = subjectName.trim().toLowerCase();
 
+    // Helper for canonical subject key
+    const canonical = (str) => {
+      const s = String(str || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (s.includes("information") || s === "ict" || s === "it") return "ict";
+      if (s === "english" || s === "englishlanguage") return "english";
+      if (s === "addmath" || s === "addmaths" || s === "addmathematics" || s === "additionalmathematics") return "addmath";
+      if (s === "extendedmath" || s === "extendedmaths" || s === "extendedmathematics" || s === "extmath" || s === "extmaths" || s === "maths" || s === "math" || s === "mathematics") return "extmath";
+      if (s === "puremath" || s === "puremaths" || s === "puremathematics" || s === "mathas") return "puremath";
+      if (s === "stats" || s === "statistics" || s === "statistics1" || s === "stat1") return "stats";
+      if (s === "mech" || s === "mechanics" || s === "mechanics1" || s === "mech1") return "mech";
+      if (s === "cosci" || s === "coscience" || s === "coordinatedscience") return "cosci";
+      if (s === "combsci" || s === "combscience" || s === "combinedscience") return "combsci";
+      if (s === "business" || s === "businessstudies") return "business";
+      if (s === "art" || s === "artdesign" || s === "artanddesign" || s === "artcraft" || s === "creativearts") return "art";
+      if (s === "acct" || s === "accounting") return "accounting";
+      if (s === "econ" || s === "econs" || s === "economics") return "economics";
+      if (s === "geo" || s === "geos" || s === "geography") return "geography";
+      if (s === "soc" || s === "sociology") return "sociology";
+      if (s === "lit" || s === "literature") return "literature";
+      if (s === "bio" || s === "biology") return "biology";
+      if (s === "chem" || s === "che" || s === "chemistry") return "chemistry";
+      if (s === "phy" || s === "phys" || s === "physics") return "physics";
+      if (s === "french") return "french";
+      if (s === "history") return "history";
+      return s;
+    };
+
+    const targetKey = canonical(target);
+
     // If student has explicit enrolled subjects:
     if (Array.isArray(student.enrolledSubjects) && student.enrolledSubjects.length > 0) {
       return student.enrolledSubjects.some(sub => {
-        const s = sub.trim().toLowerCase();
-        if (s === target) return true;
-        // Known aliases in TCIS catalog
-        if (
-          (target.includes("information") && s.includes("information")) ||
-          (target === "ict" && (s.includes("information") || s === "ict")) ||
-          (s === "ict" && (target.includes("information") || target === "ict"))
-        ) return true;
-        if (target.includes("art") && s.includes("art")) return true;
-        if (target.includes("science") && s.includes("science")) return true;
-        if (target.includes("math") && s.includes("math")) return true;
-        return false;
+        return canonical(sub) === targetKey;
       });
     }
 

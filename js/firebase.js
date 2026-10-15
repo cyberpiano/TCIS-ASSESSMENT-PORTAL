@@ -1831,26 +1831,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
+      "English Language",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Information & Communication Technology",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:46.798Z"
   },
   {
     "id": "std_065",
@@ -1861,26 +1852,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Art and Design",
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_066",
@@ -1921,26 +1903,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
+      "Biology",
+      "Chemistry",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
+      "English Language",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
       "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_068",
@@ -1981,26 +1953,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
       "French",
+      "English Language",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "Economics"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_070",
@@ -2071,26 +2034,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Geography",
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_073",
@@ -2101,26 +2055,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Art and Design",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_074",
@@ -2131,26 +2076,18 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "Extended Mathematics",
+      "Economics",
+      "Information & Communication Technology",
+      "French",
+      "English Language"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_075",
@@ -2161,26 +2098,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
       "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "French",
+      "Information & Communication Technology",
+      "English Language",
+      "Extended Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_076",
@@ -2191,26 +2119,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
       "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "English Language",
+      "Extended Mathematics",
+      "Geography",
+      "French",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_077",
@@ -2341,26 +2260,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_082",
@@ -2491,26 +2401,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
+      "French",
+      "English Language",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "Extended Mathematics",
+      "Chemistry"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_087",
@@ -2581,26 +2481,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Chemistry",
+      "Biology",
+      "Add Mathematics",
       "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_090",
@@ -2641,26 +2531,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_092",
@@ -2761,26 +2642,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Geography",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_096",
@@ -2791,26 +2663,18 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "Geography",
+      "Economics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_097",
@@ -3001,26 +2865,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_104",
@@ -3031,26 +2885,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_105",
@@ -3061,26 +2905,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Biology",
+      "Economics",
+      "Geography",
+      "Chemistry",
       "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_106",
@@ -3091,26 +2926,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Geography",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_107",
@@ -3121,26 +2947,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_108",
@@ -3151,26 +2967,18 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
       "Physics",
       "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Chemistry",
+      "Economics",
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_109",
@@ -3181,26 +2989,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_110",
@@ -3211,26 +3009,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "French",
+      "Information & Communication Technology",
+      "English Language",
+      "Extended Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_111",
@@ -3241,26 +3030,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Add Mathematics",
+      "English Language",
+      "French",
+      "Extended Mathematics",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_112",
@@ -3301,26 +3080,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
+      "Biology",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Extended Mathematics",
+      "English Language",
+      "French",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_114",
@@ -3331,26 +3100,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Biology",
+      "Physics",
+      "Add Mathematics",
+      "Geography",
       "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_115",
@@ -3361,26 +3121,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Geography",
+      "Chemistry",
+      "Biology",
+      "Add Mathematics",
       "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_116",
@@ -3451,26 +3202,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
       "Literature",
       "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
+      "Geography",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "English Language",
+      "Information & Communication Technology",
+      "French"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_119",
@@ -3511,26 +3253,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
       "Economics",
-      "Accounting",
       "Business Studies",
+      "Accounting",
       "Extended Mathematics",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "French",
+      "English Language",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_121",
@@ -3571,26 +3304,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
+      "Coordinated Science",
       "French",
       "Information & Communication Technology",
-      "Literature",
       "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_123",
@@ -3751,26 +3474,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Business Studies",
+      "Economics",
+      "Geography",
+      "Coordinated Science",
+      "Extended Mathematics",
       "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_129",
@@ -3781,26 +3495,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
+      "Geography",
       "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
+      "Information & Communication Technology",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Extended Mathematics",
+      "French",
+      "English Language"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_130",
@@ -3901,26 +3605,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Business Studies",
+      "Economics",
+      "Accounting",
       "English Language",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Extended Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_134",
@@ -3991,26 +3686,18 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
       "French",
-      "Information & Communication Technology",
-      "Literature",
       "Economics",
-      "Accounting",
       "Business Studies",
-      "Extended Mathematics",
+      "Accounting",
+      "Information & Communication Technology",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Art and Design"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_137",
@@ -4021,26 +3708,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Economics",
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_138",
@@ -4051,26 +3728,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
+      "Coordinated Science",
       "English Language",
       "French",
       "Information & Communication Technology",
-      "Literature",
       "Economics",
-      "Accounting",
       "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
       "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_139",
@@ -4081,26 +3749,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
+      "Coordinated Science",
       "English Language",
       "French",
       "Information & Communication Technology",
-      "Literature",
       "Economics",
       "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_140",
@@ -4351,26 +4010,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
+      "Coordinated Science",
       "French",
       "Information & Communication Technology",
-      "Literature",
       "Economics",
-      "Accounting",
       "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Accounting"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_149",
@@ -4381,26 +4031,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
+      "Business Studies",
       "Economics",
       "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology",
+      "French"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_150",
@@ -4411,26 +4051,16 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "English Language",
+      "Information & Communication Technology",
+      "French",
+      "Economics",
+      "Geography",
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_151",
@@ -4501,26 +4131,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
+      "English Language",
+      "Information & Communication Technology",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "French",
+      "Geography",
+      "Economics",
+      "Sociology"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_154",
@@ -4591,26 +4212,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
+      "Economics",
+      "Literature",
       "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_157",
@@ -4621,26 +4233,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Economics",
+      "Add Mathematics",
       "English Language",
+      "Coordinated Science",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
       "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_158",
@@ -4681,26 +4284,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
+      "Business Studies",
       "Economics",
       "Accounting",
-      "Business Studies",
       "Extended Mathematics",
+      "French",
+      "Information & Communication Technology",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "English Language"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_160",
@@ -4711,26 +4305,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
+      "Coordinated Science",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
       "Business Studies",
-      "Extended Mathematics",
-      "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Economics",
+      "Accounting"
     ],
     "createdAt": "2026-10-13T23:13:40.227Z",
-    "updatedAt": "2026-10-13T23:13:40.227Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_161",
@@ -4801,26 +4386,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
+      "Business Studies",
       "Economics",
       "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
+      "English Language",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Extended Mathematics",
+      "French",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_164",
@@ -4831,26 +4407,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
+      "English Language",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Accounting",
+      "Economics",
+      "Business Studies",
+      "French",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_165",
@@ -4951,26 +4518,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
+      "Extended Mathematics",
       "English Language",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
+      "Economics",
       "Sociology",
       "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_169",
@@ -4981,26 +4539,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
+      "English Language",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Information & Communication Technology",
+      "French",
+      "Accounting",
+      "Economics",
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_170",
@@ -5041,26 +4590,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Extended Mathematics",
+      "English Language",
+      "Economics",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Literature",
+      "Geography",
+      "French",
+      "Information & Communication Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_172",
@@ -5071,26 +4611,17 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
+      "Sociology",
+      "Literature",
+      "Art and Design",
       "French",
       "Information & Communication Technology",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Extended Mathematics",
+      "English Language",
       "Coordinated Science",
-      "Art and Design",
-      "Add Mathematics",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography"
+      "Extended Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_173",
@@ -6031,26 +5562,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
       "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Economics",
+      "Information Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_205",
@@ -6061,26 +5578,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
       "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "English Language"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_206",
@@ -6091,26 +5594,13 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
+      "History",
       "Literature",
       "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_207",
@@ -6121,26 +5611,13 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
       "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Accounting",
+      "Economics"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_208",
@@ -6151,26 +5628,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Geography",
+      "Physics"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_209",
@@ -6181,26 +5644,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Mechanics-1",
+      "Physics",
+      "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_210",
@@ -6211,26 +5662,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
+      "Physics",
+      "Chemistry",
       "Statistics 1",
-      "Information Technology",
       "Mechanics-1"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_211",
@@ -6241,26 +5680,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
       "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Economics"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_212",
@@ -6271,26 +5696,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Mechanics-1",
+      "Biology",
+      "Chemistry"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_213",
@@ -6301,26 +5714,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
       "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Pure Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_214",
@@ -6332,25 +5731,11 @@ const SEED_STUDENTS = [
     "status": "Active",
     "enrolledSubjects": [
       "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
       "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Information Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_215",
@@ -6361,26 +5746,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Mechanics-1",
+      "Physics",
+      "Chemistry"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_216",
@@ -6391,26 +5764,13 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "French",
+      "Economics",
+      "Literature"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_217",
@@ -6421,26 +5781,13 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
       "Accounting",
       "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Economics",
+      "Pure Mathematics"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_218",
@@ -6451,26 +5798,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
       "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_219",
@@ -6481,26 +5814,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
+      "Pure Mathematics",
       "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
       "Mechanics-1"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_220",
@@ -6511,26 +5832,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Mechanics-1",
+      "Physics",
+      "Chemistry"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_221",
@@ -6541,26 +5850,15 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
+      "Pure Mathematics",
       "Chemistry",
       "Physics",
       "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
       "Mechanics-1"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_222",
@@ -6571,26 +5869,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
       "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_223",
@@ -6601,26 +5885,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
       "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "English Language",
+      "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_224",
@@ -6631,26 +5901,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Business Studies",
+      "Sociology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_225",
@@ -6661,26 +5917,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Mechanics-1",
+      "Physics",
+      "Information Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_226",
@@ -6691,26 +5935,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
       "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Literature",
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_227",
@@ -6722,25 +5952,11 @@ const SEED_STUDENTS = [
     "status": "Active",
     "enrolledSubjects": [
       "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
       "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Geography"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_228",
@@ -6752,25 +5968,11 @@ const SEED_STUDENTS = [
     "status": "Active",
     "enrolledSubjects": [
       "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
       "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "History"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_229",
@@ -6781,26 +5983,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
       "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Business Studies"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.228Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_230",
@@ -6811,26 +5999,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
       "Sociology",
       "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "History"
     ],
     "createdAt": "2026-10-13T23:13:40.228Z",
-    "updatedAt": "2026-10-13T23:13:40.229Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_231",
@@ -6871,26 +6045,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
-      "Statistics 1",
+      "Physics",
       "Information Technology",
+      "Statistics 1",
       "Mechanics-1"
     ],
     "createdAt": "2026-10-13T23:13:40.229Z",
-    "updatedAt": "2026-10-13T23:13:40.229Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_233",
@@ -6901,26 +6063,12 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
       "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
-      "Pure Mathematics",
-      "Statistics 1",
       "Information Technology",
-      "Mechanics-1"
+      "Sociology"
     ],
     "createdAt": "2026-10-13T23:13:40.229Z",
-    "updatedAt": "2026-10-13T23:13:40.229Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   },
   {
     "id": "std_234",
@@ -6931,26 +6079,14 @@ const SEED_STUDENTS = [
     "academicYear": "2025/2026",
     "status": "Active",
     "enrolledSubjects": [
-      "English Language",
-      "French",
-      "Literature",
-      "Economics",
-      "Accounting",
-      "Business Studies",
-      "Art and Design",
-      "Chemistry",
-      "Physics",
-      "Biology",
-      "History",
-      "Sociology",
-      "Geography",
       "Pure Mathematics",
       "Statistics 1",
-      "Information Technology",
-      "Mechanics-1"
+      "Mechanics-1",
+      "Physics",
+      "Information Technology"
     ],
     "createdAt": "2026-10-13T23:13:40.229Z",
-    "updatedAt": "2026-10-13T23:13:40.229Z"
+    "updatedAt": "2026-10-14T16:13:47.014Z"
   }
 ];
 
@@ -7087,29 +6223,40 @@ const DB = {
 
   // Students
   async getStudents() {
+    let list = null;
     if (isLiveFirebase) {
       try {
         const snap = await firestoreDb.collection("students").get();
-        const list = [];
-        snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
-        return list;
+        if (!snap.empty) {
+          list = [];
+          snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+        }
       } catch (err) {
         console.warn("Firestore error getting students, falling back to local:", err);
       }
     }
-    const raw = localStorage.getItem("tcis_students");
-    return raw ? JSON.parse(raw) : SEED_STUDENTS;
+    if (!list || list.length === 0) {
+      const raw = localStorage.getItem("tcis_students");
+      list = raw ? JSON.parse(raw) : [...SEED_STUDENTS];
+    }
+
+    // Always enforce the official enrolledSubjects from SEED_STUDENTS for every student
+    if (list && Array.isArray(list)) {
+      SEED_STUDENTS.forEach(seed => {
+        const target = list.find(s => s.id === seed.id || (s.admissionNumber && s.admissionNumber === seed.admissionNumber));
+        if (target && Array.isArray(seed.enrolledSubjects)) {
+          target.enrolledSubjects = [...seed.enrolledSubjects];
+        }
+      });
+      try {
+        localStorage.setItem("tcis_students", JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    return list;
   },
 
   async getStudentById(id) {
-    if (isLiveFirebase) {
-      try {
-        const doc = await firestoreDb.collection("students").doc(id).get();
-        if (doc.exists) return { id: doc.id, ...doc.data() };
-      } catch (err) {
-        console.warn("Firestore error getting student:", err);
-      }
-    }
     const students = await this.getStudents();
     return students.find(s => s.id === id) || null;
   },
@@ -7169,6 +6316,50 @@ const DB = {
     results = results.filter(r => r.studentId !== id);
     localStorage.setItem("tcis_results", JSON.stringify(results));
     return true;
+  },
+
+  async syncOfficialSubjectAssignments() {
+    const raw = localStorage.getItem("tcis_students");
+    let students = raw ? JSON.parse(raw) : null;
+    let modified = false;
+
+    if (students && Array.isArray(students)) {
+      SEED_STUDENTS.forEach(seed => {
+        const found = students.find(s => s.id === seed.id);
+        if (found && Array.isArray(seed.enrolledSubjects)) {
+          found.enrolledSubjects = [...seed.enrolledSubjects];
+          found.updatedAt = new Date().toISOString();
+          modified = true;
+        }
+      });
+      if (modified) {
+        localStorage.setItem("tcis_students", JSON.stringify(students));
+      }
+    }
+
+    if (isLiveFirebase && firestoreDb) {
+      try {
+        const batch = firestoreDb.batch();
+        let ops = 0;
+        for (const seed of SEED_STUDENTS) {
+          if (seed.enrolledSubjects && seed.enrolledSubjects.length > 0) {
+            const ref = firestoreDb.collection("students").doc(seed.id);
+            batch.set(ref, { enrolledSubjects: seed.enrolledSubjects, updatedAt: new Date().toISOString() }, { merge: true });
+            ops++;
+            if (ops >= 450) {
+              await batch.commit();
+              ops = 0;
+            }
+          }
+        }
+        if (ops > 0) {
+          await batch.commit();
+        }
+        console.log("TCIS: Synced official enrolledSubjects to live Firestore.");
+      } catch (e) {
+        console.warn("Firestore sync official subjects warning:", e);
+      }
+    }
   },
 
   // Results

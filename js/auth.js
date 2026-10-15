@@ -45,19 +45,27 @@ const Auth = {
         // If the user was created in Firebase Auth Console but has no Firestore
         // profile yet, auto-create one so they can log in immediately.
         if (!profile) {
+          const allLocalUsers = await window.DB.getAllUsers();
+          const existingUser = allLocalUsers.find(u => u.email && u.email.toLowerCase() === cleanEmail);
+          const assignedRole = existingUser ? existingUser.role : (cleanEmail.includes("admin") ? "admin" : "teacher");
+
           const now = new Date().toISOString();
           profile = {
             uid,
             email: cleanEmail,
-            displayName: userCredential.user.displayName || cleanEmail.split("@")[0],
-            role: "admin",   // First account defaults to admin; can be changed later in Settings
+            displayName: (existingUser && existingUser.displayName) || userCredential.user.displayName || cleanEmail.split("@")[0],
+            role: assignedRole,
             active: true,
-            teachingAssignments: [],
+            teachingAssignments: (existingUser && existingUser.teachingAssignments) || [],
             createdAt: now,
             updatedAt: now
           };
-          await window.DB.saveUserProfile(profile);
-          console.log("TCIS: Auto-created Firestore profile for first-time admin:", uid);
+          try {
+            await window.DB.saveUserProfile(profile);
+          } catch (e) {
+            console.warn("Could not save profile to Firestore:", e);
+          }
+          console.log(`TCIS: Auto-created profile for ${cleanEmail} with role: ${assignedRole}`);
         }
         // ──────────────────────────────────────────────────────────────────
 

@@ -545,10 +545,11 @@ const Students = {
           <div class="mt-6 border border-slate-200 rounded-lg overflow-hidden">
             <div class="bg-slate-100 px-4 py-2 font-semibold text-sm text-slate-800 flex justify-between items-center">
               <span><i class="fa-solid fa-calendar-alt text-amber-600 mr-2"></i>${termKey}</span>
+              ${window.Auth?.isAdmin() ? `
               <button onclick="Students.generateReportFromDetails('${student.id}', '${termResults[0].academicYear}', '${termResults[0].term}')" 
                 class="px-2.5 py-1 text-xs bg-blue-800 hover:bg-blue-900 text-white rounded font-medium shadow-sm">
                 <i class="fa-solid fa-file-pdf mr-1"></i>Generate Report
-              </button>
+              </button>` : ''}
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left">
@@ -637,6 +638,10 @@ const Students = {
   },
 
   generateReportFromDetails(studentId, academicYear, term) {
+    if (!window.Auth?.isAdmin()) {
+      this.showToast("Access restricted: Only Administrators can generate reports.", "warning");
+      return;
+    }
     this.closeDetailsModal();
     window.Dashboard.switchSection("reports");
     setTimeout(() => {

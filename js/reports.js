@@ -1256,7 +1256,7 @@ const Reports = {
       else if (mode === "progressive2") modePrefix = "ProgressiveTest2";
       else if (mode === "full") modePrefix = "TerminalReport";
 
-      const fileName = `TCIS_${modePrefix}_${safeName}_${term.replace(/\s+/g, '')}.pdf`;
+      const fileName = `TCIS_${modePrefix}_${safeName}_${academicYear.replace(/\//g, '-')}_${term.replace(/\s+/g, '')}.pdf`;
 
       if (triggerDownload) {
         doc.save(fileName);
@@ -1358,7 +1358,7 @@ const Reports = {
         if (mode === "midterm") modePrefix = "MidTerm";
         else if (mode === "progressive2") modePrefix = "ProgressiveTest2";
         else if (mode === "full") modePrefix = "TerminalReport";
-        const fileName = `${modePrefix}_${safeName}_${safeAdm}.pdf`;
+        const fileName = `${modePrefix}_${safeName}_${safeAdm}_${academicYear.replace(/\//g, '-')}.pdf`;
 
         if (zip) {
           zip.file(fileName, pdfBlob);
@@ -1374,7 +1374,7 @@ const Reports = {
         if (mode === "midterm") modePrefix = "MidTerm";
         else if (mode === "progressive2") modePrefix = "ProgressiveTest2";
         else if (mode === "full") modePrefix = "Terminal";
-        const zipName = `TCIS_${modePrefix}_Reports_${(yg || 'All').replace(/\s+/g, '_')}_${term.replace(/\s+/g, '')}.zip`;
+        const zipName = `TCIS_${modePrefix}_Reports_${academicYear.replace(/\//g, '-')}_${(yg || 'All').replace(/\s+/g, '_')}_${term.replace(/\s+/g, '')}.zip`;
 
         if (window.saveAs) {
           window.saveAs(content, zipName);

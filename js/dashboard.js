@@ -28,6 +28,17 @@ const Dashboard = {
       }
     }
 
+    // 2c. One-time sync of official student subject assignments
+    if (!localStorage.getItem("tcis_student_subjects_synced_v1")) {
+      try {
+        await window.DB.syncOfficialSubjectAssignments();
+        localStorage.setItem("tcis_student_subjects_synced_v1", "true");
+        console.log("TCIS: Official student subject assignments synchronized.");
+      } catch (err) {
+        console.warn("Student subjects sync error:", err);
+      }
+    }
+
     // 3. Setup Navigation & Layout
     this.setupSidebar();
     this.setupUserUI();
@@ -239,18 +250,35 @@ const Dashboard = {
       `;
     }
 
-    // Role-based visibility for Admin-only nav tabs
-    const adminNavIds = ["navSettings", "navSubjectLinking", "navTeachers", "navSubjectsCatalog"];
+    // Role-based visibility for Admin-only nav tabs and action buttons
+    const isAdmin = window.Auth.isAdmin();
+    const adminNavIds = ["navSettings", "navSubjectLinking", "navTeachers", "navSubjectsCatalog", "navReports", "bannerGenerateReportsBtn"];
     adminNavIds.forEach(id => {
       const el = document.getElementById(id);
       if (el) {
-        if (window.Auth.isAdmin()) {
+        if (isAdmin) {
           el.classList.remove("hidden");
+          el.style.display = "";
         } else {
           el.classList.add("hidden");
+          el.style.display = "none";
         }
       }
     });
+
+    // Enforce reports page removal for teachers
+    const reportsSection = document.getElementById("section-reports");
+    if (reportsSection) {
+      if (isAdmin) {
+        reportsSection.style.display = "";
+      } else {
+        reportsSection.classList.add("hidden");
+        reportsSection.style.display = "none";
+        if (this.activeSection === "reports") {
+          this.switchSection("dashboard");
+        }
+      }
+    }
   },
 
   setupSidebar() {
@@ -301,9 +329,14 @@ const Dashboard = {
   },
 
   switchSection(sectionId) {
-    const adminOnlySections = ["settings", "subject-linking", "teachers", "subjects-catalog"];
+    const adminOnlySections = ["settings", "subject-linking", "teachers", "subjects-catalog", "reports"];
     if (adminOnlySections.includes(sectionId) && !window.Auth.isAdmin()) {
-      this.showToast("Access restricted: Administrator role required.", "error");
+      if (sectionId === "reports") {
+        this.showToast("Access restricted: Only Administrators can generate reports.", "warning");
+      } else {
+        this.showToast("Access restricted: Administrator role required.", "error");
+      }
+      this.switchSection("dashboard");
       return;
     }
 
